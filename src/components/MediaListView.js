@@ -39,6 +39,11 @@ class MediaListView extends Component {
       });
   }
 
+
+  onMakeCollageButtonPress() {
+    this.props.navigator.push({name: 'collageView'});
+  }
+
   onBackButtonPress() {
     //todo deselect all items on back button
     this.props.navigator.pop();
@@ -65,9 +70,14 @@ class MediaListView extends Component {
           {List}
         </View >
         <View style={this.props.stylesLayout.footer}>
-          <Text>
-            Давай коллаж
-          </Text>
+          <TouchableOpacity
+            style={styles.makeCollageButton}
+            activeOpacity={0.6}
+            onPress={() => {this.onMakeCollageButtonPress()}}>
+            <Text style={styles.makeCollageText}>
+              Давай коллаж
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -90,6 +100,15 @@ const styles = StyleSheet.create({
   listItem: {
     paddingHorizontal: 16 / PixelRatio.get(),
     marginBottom: 16 / PixelRatio.get()
+  },
+  makeCollageButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  makeCollageText: {
+    fontSize: 16,
+    color: '#fff'
   }
 });
 

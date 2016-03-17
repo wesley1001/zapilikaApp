@@ -61,8 +61,6 @@ export const fetchRecentUserMedia = (userId) => {
           return b.likes.count - a.likes.count;
         });
 
-        console.log(sortedMedia);
-
         return dispatch({
           type: FETCH_RECENT_USER_MEDIA,
           payload: sortedMedia

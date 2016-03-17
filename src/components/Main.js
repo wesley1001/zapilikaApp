@@ -21,7 +21,7 @@ export default class Main extends Component {
     return (
       <View style={styles.container}>
         <Navigator
-          initialRoute={{name: 'searchView'}}
+          initialRoute={{name: 'collageView'}}
           renderScene={this.renderScene}
           configureScene={() =>
          {return Navigator.SceneConfigs.FloatFromBottomAndroid;}}

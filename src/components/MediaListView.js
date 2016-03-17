@@ -40,7 +40,7 @@ class MediaListView extends Component {
   }
 
 
-  onMakeCollageButtonPress() {
+  onShareButtonPress() {
     this.props.navigator.push({name: 'collageView'});
   }
 
@@ -70,14 +70,9 @@ class MediaListView extends Component {
           {List}
         </View >
         <View style={this.props.stylesLayout.footer}>
-          <TouchableOpacity
-            style={styles.makeCollageButton}
-            activeOpacity={0.6}
-            onPress={() => {this.onMakeCollageButtonPress()}}>
-            <Text style={styles.makeCollageText}>
-              Давай коллаж
-            </Text>
-          </TouchableOpacity>
+          <FooterButton
+            text="Давай коллаж!"
+            onPress={() => {this.onShareButtonPress()}} />
         </View>
       </View>
     )
@@ -101,15 +96,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16 / PixelRatio.get(),
     marginBottom: 16 / PixelRatio.get()
   },
-  makeCollageButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  makeCollageText: {
-    fontSize: 16,
-    color: '#fff'
-  }
 });
 
 const mapStateToProps = (state) => {

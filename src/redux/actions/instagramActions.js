@@ -55,9 +55,17 @@ export const fetchRecentUserMedia = (userId) => {
       .then((resp) => resp.json())
       .then((respData) => respData.data)
       .then((userMedia) => {
+
+        //sortMediaData by likes property
+        var sortedMedia = userMedia.sort(function (a, b) {
+          return b.likes.count - a.likes.count;
+        });
+
+        console.log(sortedMedia);
+
         return dispatch({
           type: FETCH_RECENT_USER_MEDIA,
-          payload: userMedia
+          payload: sortedMedia
         })
       });
   }

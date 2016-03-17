@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   likesText: {
     //fontFamily: 'Helvetica Nue  Light',
     fontSize: 12,
-    letterSpacing: 10,
     textAlign: 'center'
   }
 });

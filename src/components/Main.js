@@ -1,0 +1,18 @@
+"use strict";
+import React, {
+  Component,
+  View,
+  Text
+} from 'react-native';
+
+export default class Main extends Component {
+  render() {
+    return (
+      <View>
+        <Text>
+          Zapilika app!!
+        </Text>
+      </View>
+    )
+  }
+}

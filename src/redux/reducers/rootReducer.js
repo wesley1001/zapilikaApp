@@ -3,8 +3,10 @@
 'use strict';
 import { combineReducers } from 'redux';
 
+import instagramReducer from './instagramReducer';
+
 const rootReducer = combineReducers({
-  base: (state = [],action) => {return state}
+  instagram: instagramReducer
 });
 
 export default rootReducer;

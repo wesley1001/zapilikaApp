@@ -40,7 +40,7 @@ class MediaListView extends Component {
   }
 
 
-  onShareButtonPress() {
+  onMakeCollageButtonPress() {
     this.props.navigator.push({name: 'collageView'});
   }
 
@@ -72,7 +72,7 @@ class MediaListView extends Component {
         <View style={this.props.stylesLayout.footer}>
           <FooterButton
             text="Давай коллаж!"
-            onPress={() => {this.onShareButtonPress()}} />
+            onPress={() => {this.onMakeCollageButtonPress()}} />
         </View>
       </View>
     )

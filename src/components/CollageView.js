@@ -14,7 +14,7 @@ import {connect} from 'react-redux';
 
 class CollageView extends Component {
 
-  onMakeCollageButton() {
+  onShareButtonPress() {
 
   }
 
@@ -45,7 +45,7 @@ class CollageView extends Component {
         <View style={this.props.stylesLayout.footer}>
           <FooterButton
             text="Зашарить!"
-            onPress={() => {this.щ()}} />
+            onPress={() => {this.onShareButtonPress()}} />
         </View>
       </View>
     )

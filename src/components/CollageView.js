@@ -3,6 +3,7 @@ import React, {
   Component,
   Text,
   View,
+  Image,
   StyleSheet,
   UIManager
 } from 'react-native';
@@ -13,9 +14,22 @@ import FooterButton from './common/FooterButton';
 import {connect} from 'react-redux';
 
 class CollageView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      collageUri: null
+    }
+  }
 
   onShareButtonPress() {
-
+    UIManager
+      .takeSnapshot(this.refs.collage, {format: 'png'})
+      .then((collageUri) => {
+        console.log(collageUri);
+          this.setState({collageUri})
+        }
+      )
+      .catch((error) => alert(error));
   }
 
   onBackButtonPress() {
@@ -29,7 +43,7 @@ class CollageView extends Component {
           <BackButton onPress={() => {this.onBackButtonPress()}}/>
         </View>
         <View style={this.props.stylesLayout.main}>
-          <View style={styles.collage}>
+          <View ref="collage" style={styles.collage}>
             <View style={styles.leftCol}>
               <View style={styles.leftTopImg}>
               </View>
@@ -41,11 +55,12 @@ class CollageView extends Component {
 
             </View>
           </View>
+          <Image style={styles.image} source={{uri: this.state.collageUri}}/>
         </View >
         <View style={this.props.stylesLayout.footer}>
           <FooterButton
             text="Зашарить!"
-            onPress={() => {this.onShareButtonPress()}} />
+            onPress={() => {this.onShareButtonPress()}}/>
         </View>
       </View>
     )
@@ -53,9 +68,17 @@ class CollageView extends Component {
 }
 
 const styles = StyleSheet.create({
-  collage: {
-    width: 300,
+  image: {
+    flex: 1,
     height: 300,
+    width: 300,
+    resizeMode: 'contain',
+    backgroundColor: 'black',
+    borderWidth: 1
+  },
+  collage: {
+    width: 200,
+    height: 200,
     flexDirection: 'row',
     alignItems: 'stretch',
     backgroundColor: 'gray',

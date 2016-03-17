@@ -70,7 +70,10 @@ var styles = StyleSheet.create({
     width: 200,
     height: 40,
     borderWidth: 1,
-    alignSelf: 'center'
+    borderRadius: 4,
+    borderColor: '#4caf50',
+    alignSelf: 'center',
+    paddingHorizontal: 8,
   }
 });
 

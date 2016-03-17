@@ -5,7 +5,8 @@ import React, {
   TouchableOpacity,
   StyleSheet,
   Text,
-  ListView
+  ListView,
+  PixelRatio,
 } from 'react-native';
 
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
@@ -39,6 +40,7 @@ class MediaListView extends Component {
   }
 
   onBackButtonPress() {
+    //todo deselect all items on back button
     this.props.navigator.pop();
   }
 
@@ -57,6 +59,7 @@ class MediaListView extends Component {
         <View style={[this.props.stylesLayout.header, styles.header]}>
           <BackButton onPress={() => {this.onBackButtonPress()}}/>
           <Text>Каталог</Text>
+          <Text>{this.props.selectedMediaItemsCount} фото</Text>
         </View>
         <View style={this.props.stylesLayout.main}>
           {List}
@@ -73,30 +76,28 @@ class MediaListView extends Component {
   renderThumbnail(mediaItemData) {
     return (
       <View style={styles.listItem}>
-        <MediaItemThumbnail data={mediaItemData} />
+        <MediaItemThumbnail data={mediaItemData}/>
       </View>
     )
   }
 }
 
-
 const styles = StyleSheet.create({
   listView: {
     alignItems: 'stretch',
-    paddingVertical: 16
+    paddingVertical: 16 / PixelRatio.get()
   },
   listItem: {
-    paddingHorizontal: 16,
-    marginBottom: 16,
+    paddingHorizontal: 16 / PixelRatio.get(),
+    marginBottom: 16 / PixelRatio.get()
   }
 });
-
-
 
 const mapStateToProps = (state) => {
   return {
     selectedUser: state.instagram.selectedUser,
-    recentUserMedia: state.instagram.recentUserMedia
+    recentUserMedia: state.instagram.recentUserMedia,
+    selectedMediaItemsCount: state.instagram.selectedMediaItems.length
   }
 };
 

@@ -43,21 +43,24 @@ var stylesLayout = StyleSheet.create({
     justifyContent: 'space-between',
   },
   header: {
+    flexDirection: 'row',
     backgroundColor: '#FFF',
     justifyContent: 'center',
-    height: 62,
-    borderBottomWidth: 1
+    alignItems: 'center',
+    height: 112 / PixelRatio.get(),
+    borderBottomWidth: 1,
+    borderColor: '#b1b1b4'
   },
   footer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#4caf50',
-    height: 52
+    height: 96/ PixelRatio.get()
   },
   main: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'gray'
+    backgroundColor: '#EFEFF4'
   }
 });

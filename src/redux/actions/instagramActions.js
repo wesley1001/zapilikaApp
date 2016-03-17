@@ -32,7 +32,6 @@ export const selectUser = (user) => {
     const matchedUser = getState().instagram.matchedUsers.find((muser) => {
       return muser.username === userNameLowerCase;
     });
-    console.log('matchedUser', matchedUser);
 
     if (!matchedUser) {
       return Promise.reject(dispatch({

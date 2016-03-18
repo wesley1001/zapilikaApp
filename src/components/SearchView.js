@@ -10,6 +10,8 @@ import React, {
 
 import SearchButton from './SearchButton';
 
+import {Actions} from 'react-native-router-flux'
+
 import {connect} from 'react-redux';
 import {searchUsers, selectUser} from '../redux/actions/instagramActions';
 
@@ -30,27 +32,22 @@ class SearchView extends Component {
       .then(() => {
         this.props.selectUser(this.state.searchName)
           .then(() => {
-            this.props.navigator.push({name: 'mediaListView'})
+            Actions.mediaList();
           })
       }); //todo handle errors
   }
 
   render() {
     return (
-      <View style={this.props.stylesLayout.container}>
-        <View style={[this.props.stylesLayout.header, styles.header]}>
-          <Text style={styles.headerText}>Запилика!</Text>
-        </View>
-        <View style={this.props.stylesLayout.main}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder='Name'
-            value={this.state.searchName}
-            onChangeText={(text) => {this.setState({searchName: text})}}
-          />
-          <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
-        </View>
-        <View style={this.props.stylesLayout.footer}>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder='Name'
+          value={this.state.searchName}
+          onChangeText={(text) => {this.setState({searchName: text})}}
+        />
+        <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
+        <View style={styles.footer}>
         </View>
       </View>
     )
@@ -58,9 +55,24 @@ class SearchView extends Component {
 }
 
 var styles = StyleSheet.create({
-  header: {
+  container: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: '#EFEFF4'
+  },
+
+
+  footer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#4caf50',
+    height: 96 / PixelRatio.get()
+  },
+
+  header: {
+    //justifyContent: 'center',
+    //alignItems: 'center'
   },
   headerText: {
     color: '#000',

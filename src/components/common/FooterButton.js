@@ -21,9 +21,10 @@ export default (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
+    backgroundColor: '#4caf50',
     justifyContent: 'center',
     alignItems: 'center',
+    height: 52
   },
   text: {
     fontSize: 16,

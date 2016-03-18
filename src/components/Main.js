@@ -1,33 +1,31 @@
 "use strict";
 import React, {
   Component,
-  View,
-  Text,
   StyleSheet,
-  Navigator,
-  PixelRatio
-
+  PixelRatio,
+  Navigator
 } from 'react-native';
 
-import ROUTES from '../routes';
+import {Actions, Scene, Router, Modal} from 'react-native-router-flux';
+
+import SearchView from './SearchView';
+import MediaListView from './MediaListView';
+import CollageView from './CollageView';
+import BackButton from './common/BackButton/BackButton';
+//renderBackButton={(props) => {return <BackButton />}}
+
+const scenes = Actions.create(
+  <Scene leftButtonTextStyle={{color: 'blue'}} navigationBarStyle={{backgroundColor: '#fff'}} key="root">
+    <Scene key="search" rightTitle='hello' component={SearchView} leftTitle="HelloWorld" title="Zapilika"
+           initial={true}/>
+    <Scene key="mediaList" sceneStyle={{paddingTop: 64}} component={MediaListView} title="Catalog"/>
+    <Scene key="collage" component={CollageView} leftTitle="fasdfasfd" title="Collage"/>
+  </Scene >
+);
 
 export default class Main extends Component {
-  renderScene(route, navigator) {
-    var Component = ROUTES[route.name];
-    return <Component route={route} navigator={navigator} stylesLayout={stylesLayout}/>
-  }
-
   render() {
-    return (
-      <View style={styles.container}>
-        <Navigator
-          initialRoute={{name: 'searchView'}}
-          renderScene={this.renderScene}
-          configureScene={() =>
-         {return Navigator.SceneConfigs.FloatFromBottomAndroid;}}
-        />
-      </View>
-    )
+    return <Router scenes={scenes}/>
   }
 }
 
@@ -46,7 +44,8 @@ var stylesLayout = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFF',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    paddingBottom: 20 / PixelRatio.get(),
     height: 112 / PixelRatio.get(),
     borderBottomWidth: 1,
     borderColor: '#b1b1b4'
@@ -55,7 +54,7 @@ var stylesLayout = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#4caf50',
-    height: 96/ PixelRatio.get()
+    height: 96 / PixelRatio.get()
   },
   main: {
     flex: 1,

@@ -13,6 +13,7 @@ import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
 import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
 
+import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {fetchRecentUserMedia} from '../redux/actions/instagramActions';
 
@@ -40,15 +41,14 @@ class MediaListView extends Component {
       });
   }
 
-
-  onMakeCollageButtonPress() {
-    if(this.props.selectedMediaItemsCount < 4) return alert('выберете 4 и больше');
-    this.props.navigator.push({name: 'collageView'});
+  componentWillReceiveProps(nextProps) {
+    if(this.props.selectedMediaItemsCount !== nextProps.selectedMediaItemsCount) {
+      Actions.refresh({title: `${nextProps.selectedMediaItemsCount} фото`})
+    }
   }
 
-  onBackButtonPress() {
-    //todo deselect all items on back button
-    this.props.navigator.pop();
+  onMakeCollageButtonPress() {
+    Actions.collage();
   }
 
   render() {
@@ -62,20 +62,11 @@ class MediaListView extends Component {
       <Text> Loading</Text>;
 
     return (
-      <View style={this.props.stylesLayout.container}>
-        <View style={[this.props.stylesLayout.header, styles.header]}>
-          <BackButton onPress={() => {this.onBackButtonPress()}}/>
-          <Text>Каталог</Text>
-          <Text>{this.props.selectedMediaItemsCount} фото</Text>
-        </View>
-        <View style={[this.props.stylesLayout.main, styles.main]}>
+      <View style={styles.container}>
           {List}
-        </View >
-        <View style={this.props.stylesLayout.footer}>
           <FooterButton
             text="Давай коллаж!"
             onPress={() => {this.onMakeCollageButtonPress()}} />
-        </View>
       </View>
     )
   }
@@ -90,8 +81,12 @@ class MediaListView extends Component {
 }
 
 const styles = StyleSheet.create({
-  main: {
-    alignItems: 'stretch'
+  container: {
+    paddingTop: 64, //todo handle it
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    backgroundColor: '#EFEFF4'
   },
   listView: {
     padding:16 / PixelRatio.get(),

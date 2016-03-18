@@ -48,25 +48,32 @@ class CollageView extends Component {
     var images = this.getImages();
 
     return (
-      <View style={this.props.stylesLayout.container}>
-        <View style={[this.props.stylesLayout.header]}>
-          <BackButton onPress={() => {this.onBackButtonPress()}}/>
-        </View>
-        <View style={this.props.stylesLayout.main}>
+      <View style={styles.container}>
+        <View style={styles.collageBox}>
           <Collage images={images}/>
-
-        </View >
-        <View style={this.props.stylesLayout.footer}>
-          <FooterButton
-            text="Зашарить!"
-            onPress={() => {this.onShareButtonPress()}}/>
         </View>
+        <FooterButton
+          text="Зашарить!"
+          onPress={() => {this.onShareButtonPress()}}/>
       </View>
     )
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#EFEFF4'
+  },
+  collageBox: {
+    flex: 1,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
 
 const mapStateToProps = (state) => {
   return {

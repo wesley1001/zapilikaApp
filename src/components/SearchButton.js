@@ -27,7 +27,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 3,
     paddingTop: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     paddingBottom: 10,
     marginTop: 10,
     backgroundColor: '#4caf50'

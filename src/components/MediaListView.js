@@ -11,6 +11,7 @@ import React, {
 
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
 import BackButton from './common/BackButton/BackButton';
+import FooterButton from './common/FooterButton';
 
 import {connect} from 'react-redux';
 import {fetchRecentUserMedia} from '../redux/actions/instagramActions';
@@ -41,6 +42,7 @@ class MediaListView extends Component {
 
 
   onMakeCollageButtonPress() {
+    if(this.props.selectedMediaItemsCount < 4) return alert('выберете 4 и больше');
     this.props.navigator.push({name: 'collageView'});
   }
 

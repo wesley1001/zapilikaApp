@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 240 / PixelRatio.get(),
-    width: 350,
+    width: 600 / PixelRatio.get(),
     justifyContent: 'center',
     alignItems: 'center'
   },

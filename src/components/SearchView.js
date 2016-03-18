@@ -4,7 +4,8 @@ import React, {
   View,
   Text,
   StyleSheet,
-  TextInput
+  TextInput,
+  PixelRatio
 } from 'react-native';
 
 import SearchButton from './SearchButton';
@@ -67,7 +68,7 @@ var styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: '#FFF',
-    width: 200,
+    width: 350 / PixelRatio.get(),
     height: 40,
     borderWidth: 1,
     borderRadius: 4,

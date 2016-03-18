@@ -68,7 +68,7 @@ class MediaListView extends Component {
           <Text>Каталог</Text>
           <Text>{this.props.selectedMediaItemsCount} фото</Text>
         </View>
-        <View style={this.props.stylesLayout.main}>
+        <View style={[this.props.stylesLayout.main, styles.main]}>
           {List}
         </View >
         <View style={this.props.stylesLayout.footer}>
@@ -90,14 +90,15 @@ class MediaListView extends Component {
 }
 
 const styles = StyleSheet.create({
+  main: {
+    alignItems: 'stretch'
+  },
   listView: {
-    alignItems: 'stretch',
-    paddingVertical: 16 / PixelRatio.get()
+    padding:16 / PixelRatio.get(),
   },
   listItem: {
-    paddingHorizontal: 16 / PixelRatio.get(),
-    marginBottom: 16 / PixelRatio.get()
-  },
+    marginBottom: 16 / PixelRatio.get(),
+  }
 });
 
 const mapStateToProps = (state) => {

@@ -13,6 +13,14 @@ import moment from 'moment';
 import {connect} from 'react-redux';
 import {selectMediaItem, deselectMediaItem} from '../../redux/actions/instagramActions';
 
+//
+//<View style={styles.captionBox}>
+
+//</View>
+//<View style={styles.likesBox}>
+
+//</View>
+
 class MediaItemThumbnail extends Component {
   constructor(props) {
     super(props);
@@ -53,20 +61,20 @@ class MediaItemThumbnail extends Component {
             <View style={styles.footerBox}>
               <View style={styles.captionBox}>
                 <View style={styles.titleBox}>
+                  <Text style={styles.titleText}>
+                    {data.caption ? data.caption.text.slice(0, 8) : ''}
+                  </Text>
                 </View>
-                <Text style={styles.titleText}>
-                  {data.caption ? data.caption.text.slice(0, 8) : ''}
-                </Text>
-                <View style={styles.creationDateBox}>
-                  <Text style={styles.creationDateText}>
+                <View style={styles.dateBox}>
+                  <Text style={styles.dateText}>
                     {creationDate}
                   </Text>
                 </View>
               </View>
               <View style={styles.likesBox}>
                 <Image
-                  source={require('./img/heart_icon.png')}
-                />
+                  style={styles.likesImage}
+                  source={require('./img/heart_icon.png')}/>
                 <Text style={styles.likesText}>
                   {data.likes.count}
                 </Text>
@@ -81,7 +89,7 @@ class MediaItemThumbnail extends Component {
   }
 }
 
-//todo figure out styling (shadows , fonts, etc)
+//todo figure out padding, delete unnecessary boxes, image size!
 const styles = StyleSheet.create({
   shadowBox1: {
     borderRadius: 4,
@@ -99,57 +107,64 @@ const styles = StyleSheet.create({
     shadowRadius: 3 / PixelRatio.get(),
   },
   thumbnail: {
-    borderWidth: 1,
-    borderColor: 'orange',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    borderRadius: 4,
     height: 384 / PixelRatio.get(),
+    borderRadius: 4,
+    alignItems: 'stretch',
     backgroundColor: '#FFF',
     overflow: 'hidden'
   },
+  imageBox: {
+  },
   image: {
     height: 240 / PixelRatio.get(),
-    width: 600 / PixelRatio.get(),
     justifyContent: 'center',
     alignItems: 'center'
   },
   footerBox: {
-    alignSelf: 'stretch',
-    flex: 1,
-    borderWidth: 1,
-    borderColor: 'red',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: 32 / PixelRatio.get(),
   },
   captionBox: {
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: 'blue',
   },
-  titleBox: {},
+  titleBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
   titleText: {
-    //fontFamily: 'Helvetica Nue Light',
+    paddingTop: 16/ PixelRatio.get(),
+    fontFamily: 'HelveticaNeue-Light',
+    fontWeight: '300',
     fontSize: 20,
-    //letterSpacing: 20
+
   },
-  creationDateBox: {},
-  creationDateText: {
-    //fontFamily: 'Helvetica Nue  Light',
+  dateBox: {
+  },
+  dateText: {
+    paddingTop: 16/ PixelRatio.get(),
+    fontFamily: 'HelveticaNeue-Light',
     fontSize: 12,
-    //letterSpacing: 10
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   likesBox: {
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'green',
+    alignItems: 'center',
+    paddingTop: 32/ PixelRatio.get(),
+  },
+  likesImage: {
+    //width: 32/ PixelRatio.get(),
+    //height: 32/ PixelRatio.get(),
   },
   likesText: {
-    //fontFamily: 'Helvetica Nue  Light',
-    fontSize: 12,
-    textAlign: 'center'
+    paddingTop: 16/ PixelRatio.get(),
+    fontFamily: 'HelveticaNeue-Light',
+    lineHeight: 32/ PixelRatio.get(),
+    fontSize: 12
   }
+
 });
 
 export default connect(null, {selectMediaItem, deselectMediaItem})(MediaItemThumbnail);

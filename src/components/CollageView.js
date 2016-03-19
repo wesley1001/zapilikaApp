@@ -27,20 +27,18 @@ class CollageView extends Component {
   onShareButtonPress() {
     UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
-      .then((collageUri) => {
-          sharePhoto(collageUri);
+      .then((imgUri) => {
+          this.setState({
+            collageUri: imgUri
+          });
+          sharePhoto(imgUri);
         }
       )
       .catch((error) => alert(error));
   }
 
-  onBackButtonPress() {
-    this.props.navigator.pop();
-  }
-
   getImages() {
     return this.props.selectedMediaItems.map((item) => {
-      console.log(item);
       return item.images.standard_resolution.url;
     })
   }
@@ -51,7 +49,9 @@ class CollageView extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.collageBox}>
-          <Collage refs="collage" images={images}/>
+          <View style={styles.collageBox}>
+            <Collage ref="collage" images={images}/>
+          </View>
         </View>
         <FooterButton
           text="Зашарить!"
@@ -63,16 +63,25 @@ class CollageView extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 64,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#EFEFF4'
   },
   collageBox: {
+    paddingHorizontal: 10,
+    paddingVertical: 40,
     flex: 1,
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+    backgroundColor: 'gray'
   }
 });
 

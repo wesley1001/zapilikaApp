@@ -48,6 +48,7 @@ function wallPost(owner_id, message,photo_id,access_token) {
 }
 
 //todo add handlingErrors
+//todo Provide auth for ios9 +
 export  function sharePhoto(photoUri) {
   Vk.authorize().then((result) => {
     //2 get upload server

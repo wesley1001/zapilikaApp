@@ -7,46 +7,45 @@ import React, {
   Text
 } from 'react-native';
 
-export default (props) => {
-  //if (props.images.length < 4) return '';
-
-  return (
-    <View style={styles.collage}>
-      <View style={styles.imagesBox}>
-        <View style={styles.leftCol}>
-          <Image
-            source={{uri: props.images[0]}}
-            style={styles.leftTopImg}
-          />
-          <Image
-            source={{uri: props.images[1]}}
-            style={styles.leftBotImg}
-          />
+export default class Collage extends Component {
+  render() {
+    return (
+      <View style={styles.collage}>
+        <View style={styles.imagesBox}>
+          <View style={styles.leftCol}>
+            <Image
+              source={{uri: this.props.images[0]}}
+              style={styles.leftTopImg}
+            />
+            <Image
+              source={{uri: this.props.images[1]}}
+              style={styles.leftBotImg}
+            />
+          </View>
+          <View style={styles.rightCol}>
+            <Image
+              source={{uri: this.props.images[2]}}
+              style={styles.rightTopImg}
+            />
+            <Image
+              source={{uri: this.props.images[3]}}
+              style={styles.rightBotImg}
+            />
+          </View>
         </View>
-        <View style={styles.rightCol}>
-          <Image
-            source={{uri: props.images[2]}}
-            style={styles.rightTopImg}
-          />
-          <Image
-            source={{uri: props.images[3]}}
-            style={styles.rightBotImg}
-          />
+        <View style={styles.captionBox}>
+          <Text style={styles.captionText}>#Zapilika</Text>
         </View>
       </View>
-      <View style={styles.captionBox}>
-        <Text style={styles.captionText}>#Zapilika</Text>
-      </View>
-    </View>
-  )
-
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   collage: {
-    width: 350,
-    height: 400,
+    flex: 1,
     flexDirection: 'column',
+    alignSelf: 'stretch',
     backgroundColor: '#4F4FFF',
     borderRadius: 10,
     padding: 10
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   captionBox: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -76,14 +75,14 @@ const styles = StyleSheet.create({
   leftTopImg: {
     backgroundColor: 'gray',
     flex: 2.2,
-    margin: 4,
+    margin: 2,
     borderRadius: 5,
     resizeMode: 'cover'
   },
   leftBotImg: {
     backgroundColor: 'gray',
     flex: 1,
-    margin: 4,
+    margin: 2,
     borderRadius: 5,
     resizeMode: 'cover'
 
@@ -91,7 +90,7 @@ const styles = StyleSheet.create({
   rightTopImg: {
     backgroundColor: 'gray',
     flex: 1,
-    margin: 4,
+    margin: 2,
     borderRadius: 5,
     resizeMode: 'cover'
 
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
   rightBotImg: {
     backgroundColor: 'gray',
     flex: 1,
-    margin: 4,
+    margin: 2,
     borderRadius: 5,
     resizeMode: 'cover'
   },

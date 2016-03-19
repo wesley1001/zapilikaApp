@@ -12,6 +12,7 @@ import React, {
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
 import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
+import LoadingIndicator from './common/LoadingIndicator';
 
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
@@ -32,7 +33,6 @@ class MediaListView extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     this.props.fetchRecentUserMedia(this.props.selectedUser.id)
       .then(() => {
         this.setState({
@@ -43,7 +43,7 @@ class MediaListView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.selectedMediaItemsCount !== nextProps.selectedMediaItemsCount) {
+    if (this.props.selectedMediaItemsCount !== nextProps.selectedMediaItemsCount) {
       Actions.refresh({title: `${nextProps.selectedMediaItemsCount} фото`})
     }
   }
@@ -53,23 +53,27 @@ class MediaListView extends Component {
   }
 
   render() {
-    var List = this.state.loaded ?
+    return (
+      <View style={styles.container}>
+        {this.renderListView()}
+        <FooterButton
+          text="Давай коллаж!"
+          onPress={() => {this.onMakeCollageButtonPress()}}/>
+      </View>
+    )
+  }
+
+  renderListView() {
+    if (!this.state.loaded) return <LoadingIndicator animating={!this.state.loaded}/>;
+
+    return (
       <ListView
         contentContainerStyle={styles.listView}
         dataSource={this.state.listViewDataSource}
         renderRow={this.renderThumbnail.bind(this)}
       />
-      :
-      <Text> Loading</Text>;
-
-    return (
-      <View style={styles.container}>
-          {List}
-          <FooterButton
-            text="Давай коллаж!"
-            onPress={() => {this.onMakeCollageButtonPress()}} />
-      </View>
     )
+
   }
 
   renderThumbnail(mediaItemData) {
@@ -86,11 +90,11 @@ const styles = StyleSheet.create({
     paddingTop: 64, //todo handle it
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: '#EFEFF4'
   },
   listView: {
-    padding:16 / PixelRatio.get(),
+    padding: 16 / PixelRatio.get(),
   },
   listItem: {
     marginBottom: 16 / PixelRatio.get(),

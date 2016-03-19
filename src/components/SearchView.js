@@ -40,13 +40,15 @@ class SearchView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder='Name'
-          value={this.state.searchName}
-          onChangeText={(text) => {this.setState({searchName: text})}}
-        />
-        <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
+        <View style={styles.mainContent}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder='Name'
+            value={this.state.searchName}
+            onChangeText={(text) => {this.setState({searchName: text})}}
+          />
+          <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
+        </View>
         <View style={styles.footer}>
         </View>
       </View>
@@ -57,35 +59,29 @@ class SearchView extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: '#EFEFF4'
   },
-
-
+  mainContent: {
+    flex: 1,
+    paddingHorizontal: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   footer: {
+    backgroundColor: '#4caf50',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4caf50',
-    height: 96 / PixelRatio.get()
-  },
-
-  header: {
-    //justifyContent: 'center',
-    //alignItems: 'center'
-  },
-  headerText: {
-    color: '#000',
-    fontSize: 17
+    alignSelf: 'stretch',
+    height: 52
   },
   searchInput: {
-    backgroundColor: '#FFF',
-    width: 350 / PixelRatio.get(),
     height: 40,
+    backgroundColor: '#FFF',
     borderWidth: 1,
     borderRadius: 4,
     borderColor: '#4caf50',
-    alignSelf: 'center',
+    alignSelf: 'stretch',
     paddingHorizontal: 8,
   }
 });
@@ -96,5 +92,4 @@ const mapStateToProps = (state) => {
     selectedUser: state.instagram.selectedUser
   }
 };
-
 export default connect(mapStateToProps, {searchUsers, selectUser})(SearchView);

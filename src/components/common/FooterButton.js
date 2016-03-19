@@ -6,6 +6,8 @@ import React, {
   StyleSheet
 } from 'react-native';
 
+import {vaToPx} from '../../helpers/helpers';
+
 export default (props) => {
   return (
     <TouchableOpacity
@@ -24,9 +26,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#4caf50',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'stretch',
     height: 52
   },
   text: {
+    letterSpacing: vaToPx(16,20), //todo is it right?
     fontSize: 16,
     color: '#fff'
   }

@@ -6,6 +6,7 @@ export const SELECT_USER = 'SELECT_USER';
 export const FETCH_RECENT_USER_MEDIA = 'FETCH_RECENT_USER_MEDIA';
 export const SELECT_MEDIA_ITEM = 'SELECT_MEDIA_ITEM';
 export const DESELECT_MEDIA_ITEM = 'DESELECT_MEDIA_ITEM';
+export const ERASE_SELECTED_MEDIA_ITEMS = 'ERASE_SELECTED_MEDIA_ITEM';
 
 export const searchUsers = (userName) => {
   return function (dispatch, getState) {
@@ -81,5 +82,12 @@ export const deselectMediaItem = (mediaItem) => {
   return {
     type: DESELECT_MEDIA_ITEM,
     payload: mediaItem
+  }
+};
+
+export const eraseSelectedMediaItems = () => {
+  return {
+    type: ERASE_SELECTED_MEDIA_ITEMS,
+    payload: []
   }
 };

@@ -16,7 +16,7 @@ import LoadingIndicator from './common/LoadingIndicator';
 
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-import {fetchRecentUserMedia} from '../redux/actions/instagramActions';
+import {fetchRecentUserMedia, eraseSelectedMediaItems} from '../redux/actions/instagramActions';
 
 class MediaListView extends Component {
   constructor(props) {
@@ -46,6 +46,10 @@ class MediaListView extends Component {
     if (this.props.selectedMediaItemsCount !== nextProps.selectedMediaItemsCount) {
       Actions.refresh({title: `${nextProps.selectedMediaItemsCount} фото`})
     }
+  }
+
+  componentWillUnmount() {
+    this.props.eraseSelectedMediaItems();
   }
 
   onMakeCollageButtonPress() {
@@ -109,4 +113,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, {fetchRecentUserMedia})(MediaListView);
+export default connect(mapStateToProps, {fetchRecentUserMedia,eraseSelectedMediaItems})(MediaListView);

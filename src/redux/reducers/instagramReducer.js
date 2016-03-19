@@ -4,7 +4,8 @@ import {
   SELECT_USER,
   FETCH_RECENT_USER_MEDIA,
   SELECT_MEDIA_ITEM,
-  DESELECT_MEDIA_ITEM
+  DESELECT_MEDIA_ITEM,
+  ERASE_SELECTED_MEDIA_ITEMS
 } from '../actions/instagramActions';
 
 export default (state = {
@@ -29,6 +30,10 @@ export default (state = {
         return item.id != action.payload.id;
       });
       return {...state, selectedMediaItems: newSelectedMediaItemsArr};
+    }
+    case ERASE_SELECTED_MEDIA_ITEMS:
+    {
+      return {...state, selectedMediaItems: action.payload}
     }
   }
 

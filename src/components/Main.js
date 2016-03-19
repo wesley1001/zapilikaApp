@@ -15,10 +15,9 @@ import BackButton from './common/BackButton/BackButton';
 //renderBackButton={(props) => {return <BackButton />}}
 
 const scenes = Actions.create(
-  <Scene leftButtonTextStyle={{color: 'blue'}} navigationBarStyle={{backgroundColor: '#fff'}} key="root">
-    <Scene key="search" rightTitle='hello' component={SearchView} leftTitle="HelloWorld" title="Zapilika"
-           initial={true}/>
-    <Scene key="mediaList" sceneStyle={{paddingTop: 64}} component={MediaListView} title="Catalog"/>
+  <Scene title="hello" leftButtonTextStyle={{color: 'blue'}} navigationBarStyle={{backgroundColor: '#fff'}} key="root">
+    <Scene key="search" component={SearchView} leftTitle="HelloWorld" title="Zapilika" initial={true}/>
+    <Scene key="mediaList" component={MediaListView} title="Catalog"/>
     <Scene key="collage" component={CollageView} leftTitle="fasdfasfd" title="Collage"/>
   </Scene >
 );

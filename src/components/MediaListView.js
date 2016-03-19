@@ -32,6 +32,7 @@ class MediaListView extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
     this.props.fetchRecentUserMedia(this.props.selectedUser.id)
       .then(() => {
         this.setState({

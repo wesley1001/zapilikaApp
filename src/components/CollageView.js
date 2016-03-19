@@ -12,6 +12,8 @@ import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
 import Collage from './Collage';
 
+import {ENDPOINTS as VK_ENDPOINTS}  from '../api/vkApi';
+import {sharePhoto} from '../api/vkApi';
 import {connect} from 'react-redux';
 
 class CollageView extends Component {
@@ -26,8 +28,7 @@ class CollageView extends Component {
     UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
       .then((collageUri) => {
-          console.log(collageUri);
-          this.setState({collageUri})
+          sharePhoto(collageUri);
         }
       )
       .catch((error) => alert(error));
@@ -50,7 +51,7 @@ class CollageView extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.collageBox}>
-          <Collage images={images}/>
+          <Collage refs="collage" images={images}/>
         </View>
         <FooterButton
           text="Зашарить!"

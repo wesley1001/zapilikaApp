@@ -34,6 +34,7 @@ class MediaItemThumbnail extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
+    nextState.checked ? console.log(this.props.data) : null;
     nextState.checked ?
       this.props.selectMediaItem(this.props.data) : this.props.deselectMediaItem(this.props.data);
   }
@@ -48,6 +49,7 @@ class MediaItemThumbnail extends Component {
       <View style={styles.shadowBox1}>
         <View style={styles.shadowBox2}>
           <TouchableOpacity
+            activeOpacity={0.7}
             style={styles.thumbnail}
             onPress={() => {this.onPressThumbnail()}}>
             <Image
@@ -55,6 +57,7 @@ class MediaItemThumbnail extends Component {
               source={{uri: data.images.standard_resolution.url}}
             >
               <Image
+                style={styles.checkImage}
                 source={checkIcon}
               />
             </Image>
@@ -108,7 +111,8 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     flex: 1,
-    height: 384 / PixelRatio.get(),
+    justifyContent: 'flex-end',
+    paddingBottom: PixelRatio.getPixelSizeForLayoutSize(8),
     borderRadius: 4,
     alignItems: 'stretch',
     backgroundColor: '#FFF',
@@ -117,33 +121,37 @@ const styles = StyleSheet.create({
   imageBox: {
   },
   image: {
-    height: 240 / PixelRatio.get(),
+    height: 120,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  checkImage: {
+    //width: PixelRatio.getPixelSizeForLayoutSize(20),
+    //height: PixelRatio.getPixelSizeForLayoutSize(20)
   },
   footerBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 32 / PixelRatio.get(),
+    alignItems: 'flex-end',
+    paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(8),
+    paddingTop: PixelRatio.getPixelSizeForLayoutSize(4),
   },
   captionBox: {
   },
   titleBox: {
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   titleText: {
-    paddingTop: 16/ PixelRatio.get(),
+    //paddingTop: PixelRatio.getPixelSizeForLayoutSize(2),
     fontFamily: 'HelveticaNeue-Light',
     fontWeight: '300',
     fontSize: 20,
-
   },
   dateBox: {
   },
   dateText: {
-    paddingTop: 16/ PixelRatio.get(),
+    paddingTop: 8,
     fontFamily: 'HelveticaNeue-Light',
     fontSize: 12,
     justifyContent: 'center',
@@ -152,16 +160,14 @@ const styles = StyleSheet.create({
   },
   likesBox: {
     alignItems: 'center',
-    paddingTop: 32/ PixelRatio.get(),
   },
   likesImage: {
-    //width: 32/ PixelRatio.get(),
-    //height: 32/ PixelRatio.get(),
+    //width: PixelRatio.getPixelSizeForLayoutSize(8),
+    //height: PixelRatio.getPixelSizeForLayoutSize(8),
   },
   likesText: {
-    paddingTop: 16/ PixelRatio.get(),
+    paddingTop: 12,
     fontFamily: 'HelveticaNeue-Light',
-    lineHeight: 32/ PixelRatio.get(),
     fontSize: 12
   }
 

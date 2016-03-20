@@ -30,6 +30,16 @@
 				<string>vk5343670</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>vk5343670</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>vkauthorize</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -49,11 +59,11 @@
 		<dict>
 			<key>vk.com</key>
 			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<key>Exception Allows Insecure HTTP Loads</key>
 				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
+				<key>Exception Requires Forward Secrecy</key>
 				<false/>
-				<key>NSIncludesSubdomains</key>
+				<key>Includes Subdomains</key>
 				<true/>
 			</dict>
 		</dict>

@@ -64,7 +64,7 @@ var styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    paddingHorizontal: 40,
+    paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),
     alignItems: 'center',
     justifyContent: 'center',
   },

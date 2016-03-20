@@ -3,7 +3,8 @@ import React, {
   Component,
   TouchableOpacity,
   Text,
-  StyleSheet
+  StyleSheet,
+  PixelRatio
 } from 'react-native';
 
 import {vaToPx} from '../../helpers/helpers';
@@ -27,10 +28,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
-    height: 52
+    height: PixelRatio.getPixelSizeForLayoutSize(24),
   },
   text: {
-    letterSpacing: vaToPx(16,20), //todo is it right?
+    letterSpacing: vaToPx(16, 20), //todo is it right?
     fontSize: 16,
     color: '#fff'
   }

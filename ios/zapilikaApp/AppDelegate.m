@@ -12,10 +12,18 @@
 #import "RCTRootView.h"
 #import "RCTLinkingManager.h"
 
+#import "VKSdk/VKSdk.h"
+
 
 
 
 @implementation AppDelegate
+
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+  [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
+  return YES;
+}
 
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url

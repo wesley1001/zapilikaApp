@@ -28,6 +28,10 @@ RCT_EXPORT_MODULE();
   return self;
 }
 
+- (void)vkSdkUserAuthorizationFailed {
+  NSLog(@"authFailed");
+}
+
 #pragma mark RN Export
 
 RCT_EXPORT_METHOD(authorize:(RCTResponseSenderBlock)jsCallback)
@@ -88,7 +92,7 @@ RCT_EXPORT_METHOD(logout)
 
 - (void)_authorize
 {
-  NSArray *SCOPE = @[VK_PER_FRIENDS, VK_PER_PHOTOS,VK_PER_WALL];
+  NSArray *SCOPE = @[VK_PER_PHOTOS,VK_PER_WALL];
   [VKSdk wakeUpSession:SCOPE completeBlock:^(VKAuthorizationState state, NSError *error) {
     if (state == VKAuthorizationAuthorized) {
       // VKAuthorizationAuthorized - means a previous session is okay, and you can continue working with user data.

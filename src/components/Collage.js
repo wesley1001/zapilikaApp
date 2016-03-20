@@ -33,22 +33,25 @@ export default class Collage extends Component {
             />
           </View>
         </View>
-        <View style={styles.captionBox}>
-          <Text style={styles.captionText}>#Zapilika</Text>
-        </View>
+
       </View>
     )
   }
 }
+
+//<View style={styles.captionBox}>
+//  <Text style={styles.captionText}>#Zapilika</Text>
+//</View>
 
 const styles = StyleSheet.create({
   collage: {
     flex: 1,
     flexDirection: 'column',
     alignSelf: 'stretch',
-    backgroundColor: '#4F4FFF',
+    backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 10
+    overflow: 'hidden',
+    padding: 1
   },
   imagesBox: {
     flex: 5,
@@ -75,22 +78,22 @@ const styles = StyleSheet.create({
   leftTopImg: {
     backgroundColor: 'gray',
     flex: 2.2,
-    margin: 2,
+    margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
   },
   leftBotImg: {
     backgroundColor: 'gray',
     flex: 1,
-    margin: 2,
+    margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
 
   },
   rightTopImg: {
     backgroundColor: 'gray',
-    flex: 1,
-    margin: 2,
+    flex: 0.7,
+    margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
 
@@ -98,10 +101,10 @@ const styles = StyleSheet.create({
   rightBotImg: {
     backgroundColor: 'gray',
     flex: 1,
-    margin: 2,
+    margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
-  },
+  }
 
 });
 

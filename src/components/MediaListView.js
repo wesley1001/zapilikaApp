@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#EFEFF4'
   },
   listView: {
-    padding: 16 / PixelRatio.get(),
+    padding: 8,
   },
   listItem: {
-    marginBottom: 16 / PixelRatio.get(),
+    marginBottom: 8,
   }
 });
 

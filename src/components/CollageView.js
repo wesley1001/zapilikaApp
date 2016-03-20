@@ -14,24 +14,29 @@ import Collage from './Collage';
 
 import {ENDPOINTS as VK_ENDPOINTS}  from '../api/vkApi';
 import {sharePhoto} from '../api/vkApi';
+import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
+import {vkEmitter, VK_EVENTS} from '../api/vkApi';
+
 class CollageView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      collageUri: null
-    }
+
+  componentDidMount() {
+    vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
+      console.log('emmited', credentials); //sharePhoto(imgUri, credentials)
+    });
+    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, () => {alert('ошибка авторизации')});
   }
 
   onShareButtonPress() {
     UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
       .then((imgUri) => {
-          this.setState({
-            collageUri: imgUri
-          });
-          sharePhoto(imgUri);
+          if (this.props.vk.authorized) {
+            console.log(this.props.vk);
+          } else {
+            Actions.vkAuth();
+          }
         }
       )
       .catch((error) => alert(error));
@@ -87,7 +92,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    selectedMediaItems: state.instagram.selectedMediaItems
+    selectedMediaItems: state.instagram.selectedMediaItems,
+    vk: state.vk
   }
 };
 

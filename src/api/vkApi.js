@@ -1,8 +1,38 @@
 'use strict';
-import Vk from 'react-native-vksdk';
-
+export const AUTHORIZED_SUCCESS_STATE = 'vKauthorized';
+const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
+
+function VkEventsEmmiter() {
+  this.events = {};
+}
+
+VkEventsEmmiter.prototype.on = function(type, listener) {
+  this.events[type] = this.events[type] || [];
+  this.events[type].push(listener);
+};
+
+VkEventsEmmiter.prototype.emit = function (type, props) {
+  if (this.events[type]) {
+    this.events[type].forEach(function (listener) {
+      listener(props);
+    });
+  }
+};
+
+export const VK_EVENTS = {
+  AUTHORIZED_SUCCESS: 'AUTHORIZED_SUCCESS',
+  AUTHORIZED_FAILED: 'AUTHORIZED_FAILED'
+};
+export var vkEmitter = new VkEventsEmmiter();
+
+
+
+
 export const ENDPOINTS = {
+  authorize: () => {
+    return `https://oauth.vk.com/authorize?client_id=${CLIENT_ID}&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=wall,photos,offline&response_type=token&v=5.45&state=${AUTHORIZED_SUCCESS_STATE}`;
+  },
   getUploadServer: (access_token, user_id) => {
     return `${ROOT_API_URL}photos.getWallUploadServer?user_id=${user_id}&access_token=${access_token}`
   },
@@ -13,6 +43,20 @@ export const ENDPOINTS = {
     return `${ROOT_API_URL}wall.post?owner_id=${owner_id}&message=${message}&attachments=${photo_id}&access_token=${access_token}`
   }
 };
+
+
+export function parseTokenUrl(url) {
+  const credMassive = url.match(/(\w+=[^\&]+)/g);
+  var credentials = {};
+
+  for (let i = 0; i < credMassive.length; i++) {
+    var credential = credMassive[i].split('=');
+    credentials[credential[0]] = credential[1];
+  }
+
+  return credentials;
+}
+
 
 const getUploadServer = (access_token, user_id) => {
   return fetch(ENDPOINTS.getUploadServer(access_token, user_id))
@@ -47,25 +91,20 @@ function wallPost(owner_id, message,photo_id,access_token) {
   .then((res) => res.text());
 }
 
-//todo add handlingErrors
-//todo Provide auth for ios9 +
-export  function sharePhoto(photoUri) {
-  Vk.authorize().then((result) => {
-    //2 get upload server
-    getUploadServer(result.credentials.token, result.credentials.userId)
+
+export  function sharePhoto(photoUri, credentials) {
+    getUploadServer(credentials.access_token, credentials.user_id)
       .then((uploadUrl) => {
         uploadPhoto(uploadUrl, photoUri)
           .then((uploadResult) => {
-            saveWallPhoto(uploadResult.server, uploadResult.photo, uploadResult.hash, result.credentials.userId, result.credentials.token)
+            saveWallPhoto(uploadResult.server, uploadResult.photo, uploadResult.hash, credentials.user_id, credentials.access_token)
               .then((resp) => {
-                  wallPost(resp.owner_id, '#zapilika #appkode', resp.id, result.credentials.token)
+                  wallPost(resp.owner_id, '#zapilika #appkode', resp.id, credentials.access_token)
                     .then((message) => console.log(message));
                 }
               );
           });
       });
-
-  }, (error) => {
-    alert('ошибка авторизации!')
-  });
 }
+
+

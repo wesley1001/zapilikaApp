@@ -13,12 +13,13 @@ import MediaListView from './MediaListView';
 import CollageView from './CollageView';
 import BackButton from './common/BackButton/BackButton';
 //renderBackButton={(props) => {return <BackButton />}}
-
+import VkAuth from './VkAuth';
 const scenes = Actions.create(
-  <Scene title="hello" leftButtonTextStyle={{color: 'blue'}} navigationBarStyle={{backgroundColor: '#fff'}} key="root">
-    <Scene key="search" component={SearchView} leftTitle="HelloWorld" title="Zapilika" initial={true}/>
-    <Scene key="mediaList" component={MediaListView} title="Catalog"/>
+  <Scene title="hello"  key="root">
+    <Scene key="search" component={SearchView}  title="Zapilika" initial={true} />
+    <Scene key="mediaList" rightTitle="Privet" component={MediaListView} title="Catalog"/>
     <Scene key="collage" component={CollageView} leftTitle="fasdfasfd" title="Collage"/>
+    <Scene key="vkAuth" component={VkAuth}/>
   </Scene >
 );
 

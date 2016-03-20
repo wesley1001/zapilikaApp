@@ -40,6 +40,8 @@ class MediaListView extends Component {
           loaded: true
         });
       });
+
+    console.log(this.props);
   }
 
   componentWillReceiveProps(nextProps) {

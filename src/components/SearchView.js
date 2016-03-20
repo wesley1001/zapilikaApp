@@ -9,14 +9,15 @@ import React, {
 } from 'react-native';
 
 import SearchButton from './SearchButton';
+const INST_USERNAME_MAX_LENGTH = 30;
 
 import {Actions} from 'react-native-router-flux'
 
 import {connect} from 'react-redux';
 import {searchUsers, selectUser} from '../redux/actions/instagramActions';
+import {initVkCredentialsOffline} from '../redux/actions/vkActions';
 
 class SearchView extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,9 +25,14 @@ class SearchView extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.initVkCredentialsOffline();
+  }
+
+
+
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
-    console.log("component state::", this.state.searchName);
 
     this.props.searchUsers(this.state.searchName)
       .then(() => {
@@ -46,6 +52,8 @@ class SearchView extends Component {
             placeholder='Name'
             value={this.state.searchName}
             onChangeText={(text) => {this.setState({searchName: text})}}
+            maxLength={INST_USERNAME_MAX_LENGTH}
+            onSubmitEditing={() => {this.onSearchPress()}}
           />
           <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
         </View>
@@ -92,4 +100,4 @@ const mapStateToProps = (state) => {
     selectedUser: state.instagram.selectedUser
   }
 };
-export default connect(mapStateToProps, {searchUsers, selectUser})(SearchView);
+export default connect(mapStateToProps, {initVkCredentialsOffline, searchUsers, selectUser})(SearchView);

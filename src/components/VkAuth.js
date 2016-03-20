@@ -8,12 +8,18 @@ import React,{
 } from 'react-native';
 
 import SearchButton from './SearchButton';
-import {ENDPOINTS as VK_ENDPOINTS, AUTHORIZED_SUCCESS_STATE} from '../api/vkApi';
+import {
+  ENDPOINTS as VK_ENDPOINTS,vkEmitter,
+  VK_EVENTS,
+  AUTHORIZATION_PROCESSED_URL
+} from '../api/vkApi';
 import {connect} from 'react-redux';
 import {fetchVkCredentialsAuth} from '../redux/actions/vkActions';
 import {Actions} from 'react-native-router-flux';
 
-import {vkEmitter, VK_EVENTS} from '../api/vkApi';
+
+
+
 
 class VkAuth extends Component {
   constructor(props) {
@@ -24,12 +30,10 @@ class VkAuth extends Component {
   }
 
   onNavigationChange(nav) {
-    //todo выделить более четко урл
     //handle multiple events for same urls
     if (nav.url === this.state.currentUrl) return;
 
-    if (~nav.url.search('access_token') && ~nav.url.search(AUTHORIZED_SUCCESS_STATE)) {
-
+    if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {
       this.props.fetchVkCredentialsAuth(nav.url)
         .then(() => {
             Actions.pop();

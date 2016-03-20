@@ -11,23 +11,25 @@ const DB = {
 export const initVkCredentialsOffline = () => {
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
-      dispatch({
-        type:GET_OFFLINE_VK_CREDENTIALS,
-        credentials: vkData,
-        authorized: true,
-      });
+      if(vkData) {
+        dispatch({
+          type:GET_OFFLINE_VK_CREDENTIALS,
+          credentials: vkData,
+          authorized: true,
+        });
+      }
     });
   }
 };
 
 
 export const fetchVkCredentialsAuth = (url) => {
-
   return function (dispatch, getState) {
+
+    //todo add user_denied
     var credentials = parseTokenUrl(url);
 
     if (!credentials.access_token || !credentials.user_id) {
-      console.log('No Token!');
       return Promise.Reject();
     }
 

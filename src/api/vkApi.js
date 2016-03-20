@@ -1,5 +1,5 @@
 'use strict';
-export const AUTHORIZED_SUCCESS_STATE = 'vKauthorized';
+export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
 

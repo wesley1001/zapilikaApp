@@ -21,8 +21,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		7F9845D81C9DA4A70012A453 /* RCTVkSdkLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F9845D71C9DA4A70012A453 /* RCTVkSdkLoginManager.m */; };
-		7FDC929A1C9D90B700ED5985 /* libVKSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDC92951C9D906600ED5985 /* libVKSdk.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -97,27 +95,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTLinking;
 		};
-		7FDC92941C9D906600ED5985 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F3C7542D182133CC00964716;
-			remoteInfo = VKSdk;
-		};
-		7FDC92961C9D906600ED5985 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F3BACC401865905B003158DA;
-			remoteInfo = VKSdkResources;
-		};
-		7FDC92981C9D906600ED5985 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F34670311B8B7C5A003EF74B;
-			remoteInfo = VKSdkFramework;
-		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -148,9 +125,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = zapilikaApp/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		7F9845D61C9DA4A70012A453 /* RCTVkSdkLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTVkSdkLoginManager.h; path = modules/RCTVkSdkLoginManager.h; sourceTree = "<group>"; };
-		7F9845D71C9DA4A70012A453 /* RCTVkSdkLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTVkSdkLoginManager.m; path = modules/RCTVkSdkLoginManager.m; sourceTree = "<group>"; };
-		7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "VK-ios-sdk.xcodeproj"; path = "../node_modules/react-native-vksdk/vk-ios-sdk/VK-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,7 +140,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FDC929A1C9D90B700ED5985 /* libVKSdk.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -286,22 +259,9 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7FDC92841C9D906500ED5985 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7FDC92951C9D906600ED5985 /* libVKSdk.a */,
-				7FDC92971C9D906600ED5985 /* VKSdkResources.bundle */,
-				7FDC92991C9D906600ED5985 /* VKSdkFramework.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				7F9845D61C9DA4A70012A453 /* RCTVkSdkLoginManager.h */,
-				7F9845D71C9DA4A70012A453 /* RCTVkSdkLoginManager.m */,
-				7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -462,10 +422,6 @@
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
-				{
-					ProductGroup = 7FDC92841C9D906500ED5985 /* Products */;
-					ProjectRef = 7FDC92831C9D906500ED5985 /* VK-ios-sdk.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -539,27 +495,6 @@
 			remoteRef = 78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7FDC92951C9D906600ED5985 /* libVKSdk.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libVKSdk.a;
-			remoteRef = 7FDC92941C9D906600ED5985 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7FDC92971C9D906600ED5985 /* VKSdkResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = VKSdkResources.bundle;
-			remoteRef = 7FDC92961C9D906600ED5985 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7FDC92991C9D906600ED5985 /* VKSdkFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = VKSdkFramework.framework;
-			remoteRef = 7FDC92981C9D906600ED5985 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -620,7 +555,6 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				7F9845D81C9DA4A70012A453 /* RCTVkSdkLoginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

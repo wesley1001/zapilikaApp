@@ -8,9 +8,8 @@ import React, {
   UIManager
 } from 'react-native';
 import RNShakeEventIOS from 'react-native-shake-event-ios';
+import Animatable from 'react-native-animatable';
 
-
-import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
 import Collage from './Collage';
 import SearchButton from '../components/SearchButton';
@@ -71,11 +70,16 @@ class CollageView extends Component {
   }
 
   onNextPress() {
+    //animate collage
+    this.refs.animatedView.tada(800);
+
+    //change imagesOrder
     if (this.state.imgOrdersArr.length - 1 > this.state.imgOrdersArr) {
       this.setState({
         curImgOrder: ++this.state.curImgOrder
       });
     } else {
+      //on orders ended
       this.setState({
         imgOrdersArr: _.shuffle(this.state.imgOrdersArr),
         curImgOrder: 0
@@ -87,7 +91,6 @@ class CollageView extends Component {
     var items = [];
     var currentOrder = this.state.imgOrdersArr[this.state.curImgOrder];
 
-    console.log(currentOrder);
     for (var i = 0; i < currentOrder.length; i++) {
       items.push(this.props.selectedMediaItems[currentOrder[i]]);
     }
@@ -104,7 +107,11 @@ class CollageView extends Component {
       <View style={styles.container}>
         <View style={styles.collageBox}>
           <View style={styles.collageBox}>
+            <Animatable.View
+              ref="animatedView"
+              style={styles.animatedView}>
             <Collage ref="collage" images={imagesUrls}/>
+            </Animatable.View>
           </View>
           <View>
             <SearchButton onPress={() => {this.onNextPress()}} text="next"/>
@@ -125,6 +132,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#EFEFF4'
+  },
+  animatedView: {
+    flex: 1,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   collageBox: {
     paddingHorizontal: 10,

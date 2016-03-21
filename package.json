@@ -10,6 +10,7 @@
     "moment": "^2.12.0",
     "react": "^0.14.7",
     "react-native": "^0.22.0-rc",
+    "react-native-animatable": "^0.5.2",
     "react-native-router-flux": "^3.0.11",
     "react-native-shake-event-ios": "^1.0.3",
     "react-native-store": "^0.4.1",

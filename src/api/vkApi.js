@@ -31,7 +31,7 @@ export var vkEmitter = new VkEventsEmmiter();
 
 export const ENDPOINTS = {
   authorize: () => {
-    return `https://oauth.vk.com/authorize?client_id=${CLIENT_ID}&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=wall,photos,offline&response_type=token&v=5.45&state=${AUTHORIZED_SUCCESS_STATE}`;
+    return `https://oauth.vk.com/authorize?client_id=${CLIENT_ID}&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=wall,photos,offline&response_type=token&v=5.45`;
   },
   getUploadServer: (access_token, user_id) => {
     return `${ROOT_API_URL}photos.getWallUploadServer?user_id=${user_id}&access_token=${access_token}`

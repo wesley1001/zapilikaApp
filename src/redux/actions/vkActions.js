@@ -9,6 +9,7 @@ const DB = {
 };
 
 export const initVkCredentialsOffline = () => {
+  console.log('init');
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
       if(vkData) {
@@ -30,6 +31,7 @@ export const fetchVkCredentialsAuth = (url) => {
     var credentials = parseTokenUrl(url);
 
     if (!credentials.access_token || !credentials.user_id) {
+      console.log(this);
       return Promise.Reject();
     }
 
@@ -41,7 +43,7 @@ export const fetchVkCredentialsAuth = (url) => {
         DB.vk.updateById(credentials,1)
       }
     });
-
+    console.log('here');
     return Promise.resolve(dispatch({
       type: FETCH_VK_CREDENTIALS_AUTH,
       authorized: true,

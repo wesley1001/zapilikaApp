@@ -12,9 +12,6 @@
 #import "RCTRootView.h"
 #import "RCTLinkingManager.h"
 
-#import "VKSdk/VKSdk.h"
-
-
 
 @implementation AppDelegate
 

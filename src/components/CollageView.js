@@ -7,8 +7,8 @@ import React, {
   StyleSheet,
   UIManager
 } from 'react-native';
+import RNShakeEventIOS from 'react-native-shake-event-ios';
 
-import _ from 'lodash';
 
 import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
@@ -21,6 +21,7 @@ import Permutations from '../helpers/permutations';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
+import _ from 'lodash';
 import {vkEmitter, VK_EVENTS} from '../api/vkApi';
 
 class CollageView extends Component {
@@ -38,6 +39,10 @@ class CollageView extends Component {
   }
 
   componentDidMount() {
+    RNShakeEventIOS.addEventListener('shake', () => {
+      this.onNextPress();
+    });
+
     vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
       console.log('emmited', credentials); //sharePhoto(imgUri, credentials)
     });
@@ -46,14 +51,19 @@ class CollageView extends Component {
     });
   }
 
+  componentWillUnmount() {
+    RNShakeEventIOS.removeEventListener('shake');
+  }
+
   onShareButtonPress() {
+    console.log(this.props.vk);
     UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
       .then((imgUri) => {
           if (this.props.vk.authorized) {
             console.log(this.props.vk);
           } else {
-            Actions.vkAuth();
+            // Actions.vkAuth();
           }
         }
       )

@@ -28,13 +28,12 @@ class MediaItemThumbnail extends Component {
       checked: false
     }
   }
-
+  
   onPressThumbnail() {
     this.setState({checked: !this.state.checked});
   }
 
   componentWillUpdate(nextProps, nextState) {
-    nextState.checked ? console.log(this.props.data) : null;
     nextState.checked ?
       this.props.selectMediaItem(this.props.data) : this.props.deselectMediaItem(this.props.data);
   }

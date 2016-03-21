@@ -8,24 +8,42 @@ import React, {
   UIManager
 } from 'react-native';
 
+import _ from 'lodash';
+
 import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
 import Collage from './Collage';
+import SearchButton from '../components/SearchButton';
 
 import {ENDPOINTS as VK_ENDPOINTS}  from '../api/vkApi';
 import {sharePhoto} from '../api/vkApi';
+import Permutations from '../helpers/permutations';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
 import {vkEmitter, VK_EVENTS} from '../api/vkApi';
 
 class CollageView extends Component {
+  constructor(props) {
+    super(props);
+
+    var imgOrdersArr = new Permutations(this.props.selectedMediaItems.length, 4).process();
+    imgOrdersArr = _.shuffle(imgOrdersArr);
+
+    this.state = {
+      imgOrdersArr: imgOrdersArr,
+      curImgOrder: 0
+
+    };
+  }
 
   componentDidMount() {
     vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
       console.log('emmited', credentials); //sharePhoto(imgUri, credentials)
     });
-    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, () => {alert('ошибка авторизации')});
+    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, () => {
+      alert('ошибка авторизации')
+    });
   }
 
   onShareButtonPress() {
@@ -42,20 +60,44 @@ class CollageView extends Component {
       .catch((error) => alert(error));
   }
 
-  getImages() {
-    return this.props.selectedMediaItems.map((item) => {
+  onNextPress() {
+    if (this.state.imgOrdersArr.length - 1 > this.state.imgOrdersArr) {
+      this.setState({
+        curImgOrder: ++this.state.curImgOrder
+      });
+    } else {
+      this.setState({
+        imgOrdersArr: _.shuffle(this.state.imgOrdersArr),
+        curImgOrder: 0
+      });
+    }
+  }
+
+  getImagesUrls() {
+    var items = [];
+    var currentOrder = this.state.imgOrdersArr[this.state.curImgOrder];
+
+    console.log(currentOrder);
+    for (var i = 0; i < currentOrder.length; i++) {
+      items.push(this.props.selectedMediaItems[currentOrder[i]]);
+    }
+
+    return items.map((item) => {
       return item.images.standard_resolution.url;
     })
   }
 
   render() {
-    var images = this.getImages();
+    var imagesUrls = this.getImagesUrls();
 
     return (
       <View style={styles.container}>
         <View style={styles.collageBox}>
           <View style={styles.collageBox}>
-            <Collage ref="collage" images={images}/>
+            <Collage ref="collage" images={imagesUrls}/>
+          </View>
+          <View>
+            <SearchButton onPress={() => {this.onNextPress()}} text="next"/>
           </View>
         </View>
         <FooterButton

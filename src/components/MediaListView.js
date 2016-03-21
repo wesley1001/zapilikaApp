@@ -40,8 +40,6 @@ class MediaListView extends Component {
           loaded: true
         });
       });
-
-    console.log(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,6 +53,10 @@ class MediaListView extends Component {
   }
 
   onMakeCollageButtonPress() {
+    if(this.props.selectedMediaItemsCount < 4) {
+      alert('выберете больше 4 фото!');
+      return;
+    }
     Actions.collage();
   }
 

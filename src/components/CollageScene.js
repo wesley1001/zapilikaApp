@@ -12,9 +12,7 @@ import Animatable from 'react-native-animatable';
 
 import FooterButton from './common/FooterButton';
 import Collage from './Collage';
-import SearchButton from '../components/SearchButton';
 
-import {ENDPOINTS as VK_ENDPOINTS}  from '../api/vkApi';
 import {sharePhoto} from '../api/vkApi';
 import Permutations from '../helpers/permutations';
 import {Actions} from 'react-native-router-flux';
@@ -23,7 +21,7 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import {vkEmitter, VK_EVENTS} from '../api/vkApi';
 
-class CollageView extends Component {
+class CollageScene extends Component {
   constructor(props) {
     super(props);
 
@@ -40,7 +38,7 @@ class CollageView extends Component {
 
   componentDidMount() {
     RNShakeEventIOS.addEventListener('shake', () => {
-      this.onNextPress();
+      this.onNextImages();
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
@@ -71,7 +69,7 @@ class CollageView extends Component {
       .catch((error) => alert(error));
   }
 
-  onNextPress() {
+  onNextImages() {
     //animate collage
     this.refs.animatedView.tada(800);
 
@@ -104,9 +102,8 @@ class CollageView extends Component {
 
   render() {
     var imagesUrls = this.getImagesUrls();
-
     return (
-      <View style={styles.container}>
+      <View style={[this.props.layoutStyle, styles.container]}>
         <View style={styles.collageBox}>
           <View style={styles.collageBox}>
             <Animatable.View
@@ -114,9 +111,6 @@ class CollageView extends Component {
               style={styles.animatedView}>
               <Collage ref="collage" images={imagesUrls}/>
             </Animatable.View>
-          </View>
-          <View>
-            <SearchButton onPress={() => {this.onNextPress()}} text="next"/>
           </View>
         </View>
         <FooterButton
@@ -128,8 +122,7 @@ class CollageView extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 64,
+  container: {    
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -164,4 +157,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps)(CollageView);
+export default connect(mapStateToProps)(CollageScene);

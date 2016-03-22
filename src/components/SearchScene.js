@@ -8,7 +8,7 @@ import React, {
   PixelRatio
 } from 'react-native';
 
-import SearchButton from './SearchButton';
+import Button from './common/MainButton';
 const INST_USERNAME_MAX_LENGTH = 30;
 
 import {Actions} from 'react-native-router-flux'
@@ -17,7 +17,7 @@ import {connect} from 'react-redux';
 import {searchUsers, selectUser} from '../redux/actions/instagramActions';
 import {initVkCredentialsOffline} from '../redux/actions/vkActions';
 
-class SearchView extends Component {
+class SearchScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,10 +29,8 @@ class SearchView extends Component {
     this.props.initVkCredentialsOffline();
   }
 
-
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
-
 
     this.props.searchUsers(this.state.searchName)
       .then(() => {
@@ -51,7 +49,7 @@ class SearchView extends Component {
 
   render() {
     return (
-      <View style={styles.container} onStartShouldSetResponder={this.containerTouched.bind(this)}>
+      <View style={[this.props.layoutStyle, styles.container]} onStartShouldSetResponder={this.containerTouched.bind(this)}>
         <View style={styles.mainContent}>
           <TextInput
             ref="textInput"
@@ -62,7 +60,7 @@ class SearchView extends Component {
             maxLength={INST_USERNAME_MAX_LENGTH}
             onSubmitEditing={() => {this.onSearchPress()}}
           />
-          <SearchButton text="поиск" onPress={() => {this.onSearchPress()}}/>
+          <Button text="поиск" onPress={() => {this.onSearchPress()}}/>
         </View>
         <View style={styles.footer}>
         </View>
@@ -107,4 +105,4 @@ const mapStateToProps = (state) => {
     selectedUser: state.instagram.selectedUser
   }
 };
-export default connect(mapStateToProps, {initVkCredentialsOffline, searchUsers, selectUser})(SearchView);
+export default connect(mapStateToProps, {initVkCredentialsOffline, searchUsers, selectUser})(SearchScene);

@@ -18,7 +18,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {fetchRecentUserMedia, eraseSelectedMediaItems} from '../redux/actions/instagramActions';
 
-class MediaListView extends Component {
+class MediaListScene extends Component {
   constructor(props) {
     super(props);
 
@@ -62,7 +62,7 @@ class MediaListView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[this.props.layoutStyle, styles.container]}>
         {this.renderListView()}
         <FooterButton
           text="Давай коллаж!"
@@ -95,7 +95,6 @@ class MediaListView extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 64, //todo handle it
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'flex-end',
@@ -117,4 +116,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, {fetchRecentUserMedia,eraseSelectedMediaItems})(MediaListView);
+export default connect(mapStateToProps, {fetchRecentUserMedia,eraseSelectedMediaItems})(MediaListScene);

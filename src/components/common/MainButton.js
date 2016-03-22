@@ -6,7 +6,7 @@ import React, {
   Text
 } from 'react-native';
 
-export default class SearchButton extends Component {
+export default class MainButton extends Component {
   render() {
     return (
       <TouchableOpacity

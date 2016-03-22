@@ -2,13 +2,13 @@
 import React from 'react-native';
 import {Provider} from 'react-redux';
 
-import Main from './components/Main';
+import Root from './components/Root';
 import store from './redux/store';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Main />
+      <Root />
     </Provider>
   )
 };

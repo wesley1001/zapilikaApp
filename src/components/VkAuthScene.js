@@ -17,16 +17,16 @@ import {connect} from 'react-redux';
 import {fetchVkCredentialsAuth} from '../redux/actions/vkActions';
 import {Actions} from 'react-native-router-flux';
 
-class VkAuth extends Component {
+class VkAuthScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUrl: null
     }
   }
-
+  
   onNavigationChange(nav) {
-    //handle multiple events for same urls
+    //prevent multiple events for same urls
     if (nav.url === this.state.currentUrl) return;
 
     if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {
@@ -78,4 +78,4 @@ export const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, {fetchVkCredentialsAuth})(VkAuth);
+export default connect(mapStateToProps, {fetchVkCredentialsAuth})(VkAuthScene);

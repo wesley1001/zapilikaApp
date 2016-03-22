@@ -1,7 +1,7 @@
 'use strict';
-import SearchView from './components/SearchView';
-import MediaListView from './components/MediaListView';
-import CollageView from './components/CollageView';
+import SearchView from './components/SearchScene';
+import MediaListView from './components/MediaListScene';
+import CollageView from './components/CollageScene';
 
 const ROUTES = {
   searchView: SearchView,

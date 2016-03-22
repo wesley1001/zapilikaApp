@@ -9,7 +9,6 @@ const DB = {
 };
 
 export const initVkCredentialsOffline = () => {
-  console.log('init');
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
       if(vkData) {

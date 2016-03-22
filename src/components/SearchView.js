@@ -30,24 +30,31 @@ class SearchView extends Component {
   }
 
 
-
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
+
 
     this.props.searchUsers(this.state.searchName)
       .then(() => {
         this.props.selectUser(this.state.searchName)
           .then(() => {
+            this.refs.textInput.blur();
             Actions.mediaList();
           })
       }); //todo handle errors
   }
 
+  containerTouched() {
+    this.refs.textInput.blur();
+    return false;
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onStartShouldSetResponder={this.containerTouched.bind(this)}>
         <View style={styles.mainContent}>
           <TextInput
+            ref="textInput"
             style={styles.searchInput}
             placeholder='Name'
             value={this.state.searchName}

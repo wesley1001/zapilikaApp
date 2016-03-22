@@ -32,7 +32,8 @@ class CollageView extends Component {
 
     this.state = {
       imgOrdersArr: imgOrdersArr,
-      curImgOrder: 0
+      curImgOrder: 0,
+      imgUri: null
 
     };
   }
@@ -43,7 +44,7 @@ class CollageView extends Component {
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
-      console.log('emmited', credentials); //sharePhoto(imgUri, credentials)
+      sharePhoto(this.state.imgUri, credentials);
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, () => {
       alert('ошибка авторизации')
@@ -55,14 +56,15 @@ class CollageView extends Component {
   }
 
   onShareButtonPress() {
-    console.log(this.props.vk);
     UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
       .then((imgUri) => {
+          this.setState({imgUri: imgUri});
+
           if (this.props.vk.authorized) {
-            console.log(this.props.vk);
+            sharePhoto(imgUri, this.props.vk.credentials);
           } else {
-            // Actions.vkAuth();
+            Actions.vkAuth();
           }
         }
       )
@@ -110,7 +112,7 @@ class CollageView extends Component {
             <Animatable.View
               ref="animatedView"
               style={styles.animatedView}>
-            <Collage ref="collage" images={imagesUrls}/>
+              <Collage ref="collage" images={imagesUrls}/>
             </Animatable.View>
           </View>
           <View>

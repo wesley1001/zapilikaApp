@@ -1,18 +1,20 @@
 'use strict';
-import React,{
+import React, {
   Component,
   Text,
   View,
   StyleSheet,
   WebView,
+  InteractionManager
 } from 'react-native';
 
 import {
-  ENDPOINTS as VK_ENDPOINTS,vkEmitter,
+  ENDPOINTS as VK_ENDPOINTS, vkEmitter,
   VK_EVENTS,
   AUTHORIZATION_PROCESSED_URL
 } from '../api/vkApi';
 
+import LoadingIndicator from './common/LoadingIndicator';
 import {connect} from 'react-redux';
 import {fetchVkCredentialsOnline} from '../redux/actions/vkActions';
 import {Actions} from 'react-native-router-flux';
@@ -21,15 +23,22 @@ class VkAuthScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUrl: null
+      currentUrl: null,
+      renderLoadingIndicatorOnly: true
     }
   }
-  
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({renderLoadingIndicatorOnly: false})
+    });
+  }
+
   onNavigationChange(nav) {
     //prevent multiple events for same urls
     if (nav.url === this.state.currentUrl) return;
 
-    if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {      
+    if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {
       this.props.fetchVkCredentialsOnline(nav.url)
         .then(() => {
             Actions.pop();
@@ -37,12 +46,12 @@ class VkAuthScene extends Component {
           }
         )
         .catch((err) => {
-          console.log('error');
+            console.log('error');
             Actions.pop();
             vkEmitter.emit(VK_EVENTS.AUTHORIZED_FAILED, err);
           }
         );
-      
+
       this.setState({currentUrl: nav.url});
     }
   }
@@ -50,13 +59,23 @@ class VkAuthScene extends Component {
   render() {
     return (
       <View style={[this.props.layoutStyle, styles.container]}>
+        {this.renderWebView()}
+      </View>
+    )
+  }
+
+  renderWebView() {
+    if (this.state.renderLoadingIndicatorOnly) {
+      return <LoadingIndicator />
+    } else {
+      return (
         <WebView
           style={styles.web}
           source={{uri: VK_ENDPOINTS.authorize()}}
           onNavigationStateChange={(nav) => {this.onNavigationChange(nav)}}
         />
-      </View>
-    )
+      )
+    }
   }
 }
 

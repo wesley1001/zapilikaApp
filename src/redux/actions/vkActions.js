@@ -4,6 +4,7 @@ import {parseTokenUrl} from '../../api/vkApi';
 
 export const FETCH_VK_CREDENTIALS_ONLINE = 'FETCH_VK_CREDENTIALS_ONLINE';
 export const INIT_VK_CREDENTIALS_LOCAL = 'INIT_VK_CREDENTIALS_LOCAL';
+export const ACCESS_DENIED = 'отмена авторизации';
 
 const DB = {
   vk: Store.model('vk')
@@ -33,7 +34,7 @@ export const fetchVkCredentialsOnline = (url) => {
     //error handling
     if (!credentials.access_token || !credentials.user_id) {
       if(credentials.error && credentials.error  === 'access_denied') {
-        return Promise.reject('отмена авторизации');
+        return Promise.reject(ACCESS_DENIED);
       } else {
         return Promise.reject('ошибка авторизации');
       }

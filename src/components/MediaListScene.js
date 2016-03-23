@@ -57,7 +57,7 @@ class MediaListScene extends Component {
 
   onMakeCollageButtonPress() {
     if (this.props.selectedMediaItemsCount < 4) {
-      Alert.alert('','выберите больше 4 фото!');
+      Alert.alert('', 'выберите больше 4 фото!');
       return;
     }
     Actions.collage();

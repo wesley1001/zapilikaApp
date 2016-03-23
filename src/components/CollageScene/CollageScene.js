@@ -7,7 +7,7 @@ import React, {
   StyleSheet,
   UIManager,
   Dimensions,
-  Alert
+  Alert,
 } from 'react-native';
 import RNShakeEventIOS from 'react-native-shake-event-ios';
 import Animatable from 'react-native-animatable';
@@ -22,6 +22,7 @@ import {connect} from 'react-redux';
 
 import _ from 'lodash';
 import {vkEmitter, VK_EVENTS} from '../../api/vkApi';
+import {ACCESS_DENIED} from '../../redux/actions/vkActions';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -37,7 +38,6 @@ class CollageScene extends Component {
       imgOrdersArr: imgOrdersArr,
       curImgOrder: 0,
       snapShotUri: null
-
     };
   }
 
@@ -50,7 +50,8 @@ class CollageScene extends Component {
       sharePhoto(this.state.imgUri, this.props.vk.credentials);
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, (err) => {
-      Alert.alert(':(','авторизация отменена')
+      if(err === ACCESS_DENIED) return;
+      Alert.alert(':(',err);
     });
   }
 

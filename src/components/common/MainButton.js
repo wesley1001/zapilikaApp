@@ -34,7 +34,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#4caf50'
   },
   disabledButton: {
-    backgroundColor: '#b8ccb8'
+    backgroundColor: '#9bbaae'
   },
   buttonText: {
     flex: 1,

@@ -9,17 +9,11 @@ import React, {
 } from 'react-native';
 
 import moment from 'moment';
-
+import {truncateStr} from '../../helpers/helpers';
 import {connect} from 'react-redux';
 import {selectMediaItem, deselectMediaItem} from '../../redux/actions/instagramActions';
 
-//
-//<View style={styles.captionBox}>
 
-//</View>
-//<View style={styles.likesBox}>
-
-//</View>
 
 class MediaItemThumbnail extends Component {
   constructor(props) {
@@ -28,7 +22,7 @@ class MediaItemThumbnail extends Component {
       checked: false
     }
   }
-  
+
   onPressThumbnail() {
     this.setState({checked: !this.state.checked});
   }
@@ -64,7 +58,7 @@ class MediaItemThumbnail extends Component {
               <View style={styles.captionBox}>
                 <View style={styles.titleBox}>
                   <Text style={styles.titleText}>
-                    {data.caption ? data.caption.text.slice(0, 8) : ''}
+                    {truncateStr(data.caption ? data.caption.text : ' ', 22)}
                   </Text>
                 </View>
                 <View style={styles.dateBox}>
@@ -85,8 +79,6 @@ class MediaItemThumbnail extends Component {
           </TouchableOpacity>
         </View>
       </View>
-
-
     )
   }
 }
@@ -117,8 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     overflow: 'hidden'
   },
-  imageBox: {
-  },
+  imageBox: {},
   image: {
     height: 120,
     justifyContent: 'center',
@@ -135,8 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(8),
     paddingTop: PixelRatio.getPixelSizeForLayoutSize(4),
   },
-  captionBox: {
-  },
+  captionBox: {},
   titleBox: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -147,8 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 20,
   },
-  dateBox: {
-  },
+  dateBox: {},
   dateText: {
     paddingTop: 8,
     fontFamily: 'HelveticaNeue-Light',

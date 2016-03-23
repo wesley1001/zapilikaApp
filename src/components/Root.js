@@ -10,7 +10,7 @@ import BackButton from './common/BackButton/BackButton';
 
 import SearchScene from './SearchScene';
 import MediaListScene from './MediaListScene';
-import CollageScene from './CollageScene';
+import CollageScene from './CollageScene/CollageScene';
 import VkAuthScene from './VkAuthScene';
 
 function renderBackButton() {

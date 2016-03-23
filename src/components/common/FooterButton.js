@@ -7,8 +7,6 @@ import React, {
   PixelRatio
 } from 'react-native';
 
-import {vaToPx} from '../../helpers/helpers';
-
 export default (props) => {
   return (
     <TouchableOpacity
@@ -30,8 +28,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: PixelRatio.getPixelSizeForLayoutSize(24),
   },
-  text: {
-    letterSpacing: vaToPx(16, 20), //todo is it right?
+  text: {  
     fontSize: 16,
     color: '#fff'
   }

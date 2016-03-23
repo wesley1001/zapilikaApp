@@ -1,6 +1,5 @@
 'use strict';
 import {
-  SEARCH_USERS,
   SELECT_USER,
   FETCH_RECENT_USER_MEDIA,
   SELECT_MEDIA_ITEM,
@@ -9,25 +8,21 @@ import {
 } from '../actions/instagramActions';
 
 export default (state = {
-  matchedUsers: [],
   selectedUser: null,
   recentUserMedia: [],
-  selectedMediaItems: []
+  selectedMediaItems: [],  
 }, action) => {
-  switch (action.type) {
-    case SEARCH_USERS:
-      return {...state, matchedUsers: action.payload};
+  switch (action.type) {   
     case SELECT_USER:
-      return {...state, selectedUser: action.payload};
+      return {...state, selectedUser: action.selectedUser};
     case FETCH_RECENT_USER_MEDIA:
-      return {...state, recentUserMedia: action.payload};
+      return {...state, recentUserMedia: action.media};
     case SELECT_MEDIA_ITEM:
-      return {...state, selectedMediaItems: state.selectedMediaItems.concat(action.payload)};
+      return {...state, selectedMediaItems: state.selectedMediaItems.concat(action.selectedItem)};
     case DESELECT_MEDIA_ITEM:
     {
-      //todo rename
       const newSelectedMediaItemsArr = state.selectedMediaItems.filter((item) => {
-        return item.id != action.payload.id;
+        return item.id != action.deselectedItem.id;
       });
       return {...state, selectedMediaItems: newSelectedMediaItemsArr};
     }

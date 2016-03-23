@@ -12,16 +12,16 @@ import Button from './common/MainButton';
 const INST_USERNAME_MAX_LENGTH = 30;
 
 import {Actions} from 'react-native-router-flux'
-
 import {connect} from 'react-redux';
-import {searchUsers, selectUser} from '../redux/actions/instagramActions';
+import {selectUser} from '../redux/actions/instagramActions';
 import {initVkCredentialsOffline} from '../redux/actions/vkActions';
 
 class SearchScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchName: ''
+      searchName: '',
+      searchButtonDisabled: false
     };
   }
 
@@ -31,15 +31,19 @@ class SearchScene extends Component {
 
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
+    this.setState({searchButtonDisabled: true});
 
-    this.props.searchUsers(this.state.searchName)
+    this.props.selectUser(this.state.searchName)
       .then(() => {
-        this.props.selectUser(this.state.searchName)
-          .then(() => {
-            this.refs.textInput.blur();
-            Actions.mediaList();
-          })
-      }); //todo handle errors
+          Actions.mediaList();
+          this.setState({searchButtonDisabled: false});
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+        this.setState({searchButtonDisabled: false});
+      });
+
   }
 
   containerTouched() {
@@ -49,7 +53,8 @@ class SearchScene extends Component {
 
   render() {
     return (
-      <View style={[this.props.layoutStyle, styles.container]} onStartShouldSetResponder={this.containerTouched.bind(this)}>
+      <View style={[this.props.layoutStyle, styles.container]}
+            onStartShouldSetResponder={() => {this.containerTouched()}}>
         <View style={styles.mainContent}>
           <TextInput
             ref="textInput"
@@ -60,7 +65,10 @@ class SearchScene extends Component {
             maxLength={INST_USERNAME_MAX_LENGTH}
             onSubmitEditing={() => {this.onSearchPress()}}
           />
-          <Button text="поиск" onPress={() => {this.onSearchPress()}}/>
+          <Button
+            disabled={this.state.searchButtonDisabled}
+            text="поиск"
+            onPress={() => {this.onSearchPress()}}/>
         </View>
         <View style={styles.footer}>
         </View>
@@ -101,8 +109,7 @@ var styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    matchedUsers: state.instagram.matchedUsers,
     selectedUser: state.instagram.selectedUser
   }
 };
-export default connect(mapStateToProps, {initVkCredentialsOffline, searchUsers, selectUser})(SearchScene);
+export default connect(mapStateToProps, {initVkCredentialsOffline, selectUser})(SearchScene);

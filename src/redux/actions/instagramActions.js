@@ -1,53 +1,49 @@
 'use strict';
 import {ENDPOINTS as INST_ENDPOINTS} from '../../api/instagramApi';
 
-export const SEARCH_USERS = 'SEARCH_USERS';
+
 export const SELECT_USER = 'SELECT_USER';
 export const FETCH_RECENT_USER_MEDIA = 'FETCH_RECENT_USER_MEDIA';
 export const SELECT_MEDIA_ITEM = 'SELECT_MEDIA_ITEM';
 export const DESELECT_MEDIA_ITEM = 'DESELECT_MEDIA_ITEM';
 export const ERASE_SELECTED_MEDIA_ITEMS = 'ERASE_SELECTED_MEDIA_ITEM';
 
-export const searchUsers = (userName) => {
-  return function (dispatch, getState) {
-    var userNameLowerCase = userName.toLowerCase(); //todo refactoring
+export const selectUser = (userName) => {
+  return (dispatch, getState) => {
+    const userNameLowCase = userName.toLowerCase();
 
+   // prevent from searching the same user as already selected
     if (getState().instagram.selectedUser &&
-      getState().instagram.selectedUser.username === userNameLowerCase) {
-      return Promise.resolve();
+      getState().instagram.selectedUser.username === userNameLowCase) {
+      console.log('here');
+      return  Promise.resolve();
     }
 
-    return fetch(INST_ENDPOINTS.searchUsers(userNameLowerCase))
+    //selectUser all users with given userName
+    return fetch(INST_ENDPOINTS.searchUsers(userNameLowCase))
       .then((resp) => resp.json())
       .then((respData) => respData.data)
       .then((matchedUsers) => {
-        return dispatch({
-          type: SEARCH_USERS,
-          payload: matchedUsers
+        //search particular user
+        const matchedUser = matchedUsers.find((u) => {
+          return u.username === userNameLowCase;
         });
+        console.log()
+        if (!matchedUser) {
+          return Promise.reject(dispatch({
+            type: SELECT_USER,
+            selectedUser: null
+          }));
+        } else {
+          return Promise.resolve(dispatch({
+            type: SELECT_USER,
+            selectedUser: matchedUser
+          }));
+        }
+      }).catch(() => {
+        return Promise.reject('reject')
       });
   }
-};
-
-export const selectUser = (user) => {
-  return function (dispatch, getState) {
-    var userNameLowerCase = user.toLowerCase(); //todo refactoring
-    const matchedUser = getState().instagram.matchedUsers.find((muser) => {
-      return muser.username === userNameLowerCase;
-    });
-
-    if (!matchedUser) {
-      return Promise.reject(dispatch({
-        type: SELECT_USER,
-        payload: null
-      }));
-    } else {
-      return Promise.resolve(dispatch({
-        type: SELECT_USER,
-        payload: matchedUser
-      }));
-    }
-  };
 };
 
 export const fetchRecentUserMedia = (userId) => {
@@ -64,24 +60,23 @@ export const fetchRecentUserMedia = (userId) => {
 
         return dispatch({
           type: FETCH_RECENT_USER_MEDIA,
-          payload: sortedMedia
+          media: sortedMedia
         })
       });
   }
 };
 
-
 export const selectMediaItem = (mediaItem) => {
   return {
     type: SELECT_MEDIA_ITEM,
-    payload: mediaItem
+    selectedItem: mediaItem
   }
 };
 
 export const deselectMediaItem = (mediaItem) => {
   return {
     type: DESELECT_MEDIA_ITEM,
-    payload: mediaItem
+    deselectedItem: mediaItem
   }
 };
 

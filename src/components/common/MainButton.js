@@ -10,7 +10,8 @@ export default class MainButton extends Component {
   render() {
     return (
       <TouchableOpacity
-        style={styles.button}
+        disabled={this.props.disabled}
+        style={[styles.button, this.props.disabled ? styles.disabledButton : null]}
         activeOpacity={0.6}
         onPress={this.props.onPress}>
         <Text style={styles.buttonText}>
@@ -31,6 +32,9 @@ var styles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: 10,
     backgroundColor: '#4caf50'
+  },
+  disabledButton: {
+    backgroundColor: '#b8ccb8'
   },
   buttonText: {
     flex: 1,

@@ -5,21 +5,26 @@ import React, {
   View,
   Image,
   StyleSheet,
-  UIManager
+  UIManager,
+  Dimensions,
+  Imagea
 } from 'react-native';
 import RNShakeEventIOS from 'react-native-shake-event-ios';
 import Animatable from 'react-native-animatable';
 
-import FooterButton from './common/FooterButton';
+import FooterButton from './../common/FooterButton';
 import Collage from './Collage';
 
-import {sharePhoto} from '../api/vkApi';
-import Permutations from '../helpers/permutations';
+import {sharePhoto} from '../../api/vkApi';
+import Permutations from '../../helpers/permutations';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
 import _ from 'lodash';
-import {vkEmitter, VK_EVENTS} from '../api/vkApi';
+import {vkEmitter, VK_EVENTS} from '../../api/vkApi';
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 class CollageScene extends Component {
   constructor(props) {
@@ -105,13 +110,15 @@ class CollageScene extends Component {
     return (
       <View style={[this.props.layoutStyle, styles.container]}>
         <View style={styles.collageBox}>
-          <View style={styles.collageBox}>
-            <Animatable.View
-              ref="animatedView"
-              style={styles.animatedView}>
-              <Collage ref="collage" images={imagesUrls}/>
-            </Animatable.View>
-          </View>
+          <Animatable.View
+            ref="animatedView"
+            style={styles.animatedView}>
+            <Collage ref="collage" images={imagesUrls}/>
+          </Animatable.View>
+        </View>
+        <View style={styles.textBox}>
+          <Text style={styles.text}>потряси чтоб сменить</Text>
+          <Image source={require('./img/shake.png')} style={{width: 100, height: 100, opacity: 0.2}}/>
         </View>
         <FooterButton
           text="Зашарить!"
@@ -122,7 +129,7 @@ class CollageScene extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {    
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -134,10 +141,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  collageBox: {
-    paddingHorizontal: 10,
-    paddingVertical: 40,
+  textBox: {
+    paddingHorizontal: 50,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  text: {
+    fontSize: 16,
+    opacity: 0.5,
+  },
+  collageBox: {
+    height: deviceWidth,
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+    // flex: 1,
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',

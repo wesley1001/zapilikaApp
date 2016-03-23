@@ -34,11 +34,12 @@ class SearchScene extends Component {
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
 
+
     this.setState({searchButtonDisabled: true});
 
     this.props.selectUser(this.state.searchName)
       .then(() => {
-        this.refs.container.pointerEvents="none";
+          this.refs.textInput.blur();
           Actions.mediaList();
           this.setState({searchButtonDisabled: false});
         }

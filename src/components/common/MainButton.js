@@ -41,6 +41,17 @@ export default class MainButton extends Component {
   }
 }
 
+MainButton.propTypes = {
+  text: React.PropTypes.string,
+  onPress: React.PropTypes.func
+};
+
+MainButton.defaultProps = {
+  text: 'button',
+  onPress: () => {
+  }
+};
+
 var styles = StyleSheet.create({
   button: {
     justifyContent: 'center',

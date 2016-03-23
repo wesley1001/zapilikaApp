@@ -68,7 +68,7 @@ class MediaListScene extends Component {
       <View style={[this.props.layoutStyle, styles.container]}>
         {this.renderListView()}
         <FooterButton
-          text="Давай коллаж!"
+          text="Давай коллаж"
           onPress={() => {this.onMakeCollageButtonPress()}}/>
       </View>
     )

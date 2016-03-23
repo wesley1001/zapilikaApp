@@ -5,7 +5,7 @@ import React, {
   StyleSheet
 } from 'react-native';
 
-export default ({animating}) => {
+const LoadingIndicator = ({animating}) => {
   return (
     <View style={styles.indicatorBox}>
       <ActivityIndicatorIOS
@@ -15,7 +15,12 @@ export default ({animating}) => {
     </View>
 
   )
-}
+};
+
+LoadingIndicator.PropTypes = {
+  animating: React.PropTypes.bool
+};
+
 
 const styles = StyleSheet.create({
   indicatorBox: {
@@ -28,3 +33,5 @@ const styles = StyleSheet.create({
   }
 
 });
+
+export default LoadingIndicator;

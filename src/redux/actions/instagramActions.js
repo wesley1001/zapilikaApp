@@ -15,7 +15,6 @@ export const selectUser = (userName) => {
     // prevent from searching  already selected user
     if (getState().instagram.selectedUser &&
       getState().instagram.selectedUser.username === userNameLowCase) {
-      console.log('here');
       return Promise.resolve();
     }
 
@@ -48,12 +47,11 @@ export const selectUser = (userName) => {
 };
 
 export const fetchRecentUserMedia = (userId) => {
-  return function (dispatch, getState) {
+  return dispatch => {
     return fetch(INST_ENDPOINTS.fetchRecentUserMedia(userId))
       .then((resp) => resp.json())
       .then((respData) => respData.data)
       .then((userMedia) => {
-
         //sortMediaData by likes property
         var sortedMedia = userMedia.sort(function (a, b) {
           return b.likes.count - a.likes.count;
@@ -63,7 +61,8 @@ export const fetchRecentUserMedia = (userId) => {
           type: FETCH_RECENT_USER_MEDIA,
           media: sortedMedia
         })
-      });
+      })
+      .catch(() => {});
   }
 };
 

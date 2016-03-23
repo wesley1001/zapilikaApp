@@ -21,12 +21,17 @@ export default class BackButton extends Component {
         <Image source={require('./img/back_icon.png')}
                style={styles.image}/>
         <Text style={styles.text}>
-          {this.props.scenes[this.props.scenes.length-2].navigationState.title || ''}
+          {this.props.scenes[this.props.scenes.length - 2].navigationState.title || ''}
         </Text>
       </TouchableOpacity>
     )
   }
 }
+
+BackButton.PropTypes = {
+  scenes: React.PropTypes.array.isRequired,
+  navigationState: React.PropTypes.any.isRequired
+};
 
 const styles = StyleSheet.create({
   container: {

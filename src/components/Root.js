@@ -18,7 +18,7 @@ function renderBackButton() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  layoutStyle: {
     paddingTop: 64
   },
   navBar: {
@@ -30,18 +30,17 @@ const scenes = Actions.create(
   <Scene key="root"
          renderBackButton={renderBackButton}
          navigationBarStyle={styles.navBar}
-
   >
     <Scene key="search" component={SearchScene} title="Запилика" initial={true}/>
     <Scene key="mediaList" component={MediaListScene} title="Каталог"/>
     <Scene key="collage" component={CollageScene} title="Коллаж"/>
-    <Scene key="vkAuth" component={VkAuthScene}/>
+    <Scene key="vkAuth" direction="vertical" component={VkAuthScene}/>
   </Scene >
 );
 
 export default class Root extends Component {
   render() {
-    return <Router layoutStyle={styles.container} scenes={scenes}/>
+    return <Router layoutStyle={styles.layoutStyle} scenes={scenes}/>
   }
 }
 

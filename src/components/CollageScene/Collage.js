@@ -4,11 +4,17 @@ import React, {
   View,
   StyleSheet,
   Image,
-  Text
+  Text,
+  Dimensions,
+  PixelRatio
 } from 'react-native';
+
+const deviceWidth = Dimensions.get('window').width;
 
 export default class Collage extends Component {
   render() {
+    if (this.props.images.length < 4) return null;
+
     return (
       <View style={styles.collage}>
         <View style={styles.imagesBox}>
@@ -33,21 +39,20 @@ export default class Collage extends Component {
             />
           </View>
         </View>
-
       </View>
     )
   }
 }
 
-//<View style={styles.captionBox}>
-//  <Text style={styles.captionText}>#Zapilika</Text>
-//</View>
+Collage.PropTypes = {
+  images: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+};
 
 const styles = StyleSheet.create({
   collage: {
-    flex: 1,
+    height: deviceWidth - PixelRatio.getPixelSizeForLayoutSize(20),
+    width: deviceWidth - PixelRatio.getPixelSizeForLayoutSize(20),
     flexDirection: 'column',
-    alignSelf: 'stretch',
     backgroundColor: '#FFF',
     borderRadius: 10,
     overflow: 'hidden',
@@ -77,14 +82,14 @@ const styles = StyleSheet.create({
   },
   leftTopImg: {
     backgroundColor: 'gray',
-    flex: 2.2,
+    flex: 2,
     margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
   },
   leftBotImg: {
     backgroundColor: 'gray',
-    flex: 1,
+    flex: 1.1,
     margin: 1,
     borderRadius: 5,
     resizeMode: 'cover'
@@ -105,6 +110,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     resizeMode: 'cover'
   }
-
 });
 

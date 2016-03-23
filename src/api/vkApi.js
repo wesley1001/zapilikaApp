@@ -1,4 +1,6 @@
 'use strict';
+
+import {Alert, NetInfo} from 'react-native';
 export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
@@ -93,6 +95,10 @@ function wallPost(owner_id, message,photo_id,access_token) {
 
 
 export  function sharePhoto(photoUri, credentials) {
+    if(!NetInfo.isConnected)  {
+      Alert.alert(':(','Кажется пропал интернет');
+      return;
+    }
     getUploadServer(credentials.access_token, credentials.user_id)
       .then((uploadUrl) => {
         uploadPhoto(uploadUrl, photoUri)

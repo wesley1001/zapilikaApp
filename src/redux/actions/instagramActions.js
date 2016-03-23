@@ -1,6 +1,6 @@
 'use strict';
+import {NetInfo, Alert} from 'react-native';
 import {ENDPOINTS as INST_ENDPOINTS} from '../../api/instagramApi';
-
 
 export const SELECT_USER = 'SELECT_USER';
 export const FETCH_RECENT_USER_MEDIA = 'FETCH_RECENT_USER_MEDIA';
@@ -12,14 +12,15 @@ export const selectUser = (userName) => {
   return (dispatch, getState) => {
     const userNameLowCase = userName.toLowerCase();
 
-   // prevent from searching the same user as already selected
+    // prevent from searching  already selected user
     if (getState().instagram.selectedUser &&
       getState().instagram.selectedUser.username === userNameLowCase) {
       console.log('here');
-      return  Promise.resolve();
+      return Promise.resolve();
     }
 
-    //selectUser all users with given userName
+    //select all users with given userName
+    if (!NetInfo.isConnected) Alert.alert(':(', 'Кажется пропал интернет');
     return fetch(INST_ENDPOINTS.searchUsers(userNameLowCase))
       .then((resp) => resp.json())
       .then((respData) => respData.data)
@@ -28,7 +29,7 @@ export const selectUser = (userName) => {
         const matchedUser = matchedUsers.find((u) => {
           return u.username === userNameLowCase;
         });
-        console.log()
+        
         if (!matchedUser) {
           return Promise.reject(dispatch({
             type: SELECT_USER,

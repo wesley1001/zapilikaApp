@@ -5,7 +5,8 @@ import React, {
   Text,
   StyleSheet,
   TextInput,
-  PixelRatio
+  PixelRatio,
+  Alert
 } from 'react-native';
 
 import Button from './common/MainButton';
@@ -14,36 +15,41 @@ const INST_USERNAME_MAX_LENGTH = 30;
 import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux';
 import {selectUser} from '../redux/actions/instagramActions';
-import {initVkCredentialsOffline} from '../redux/actions/vkActions';
+import {initVkCredentialsLocal} from '../redux/actions/vkActions';
 
 class SearchScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
       searchName: '',
+      wrongUserName: false,
       searchButtonDisabled: false
     };
   }
 
   componentDidMount() {
-    this.props.initVkCredentialsOffline();
+    this.props.initVkCredentialsLocal();
   }
 
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
+
     this.setState({searchButtonDisabled: true});
 
     this.props.selectUser(this.state.searchName)
       .then(() => {
+        this.refs.container.pointerEvents="none";
           Actions.mediaList();
           this.setState({searchButtonDisabled: false});
         }
       )
       .catch((err) => {
         console.log(err);
+        this.setState({
+          wrongUserName: true
+        });
         this.setState({searchButtonDisabled: false});
       });
-
   }
 
   containerTouched() {
@@ -51,20 +57,30 @@ class SearchScene extends Component {
     return false;
   }
 
+  onTextInputTextChange(text) {
+    //outside of render function cause of #4845 issue
+    this.setState({searchName: text, wrongUserName: false});
+  }
+
+
   render() {
     return (
-      <View style={[this.props.layoutStyle, styles.container]}
+      <View ref="container" style={[this.props.layoutStyle, styles.container]}
             onStartShouldSetResponder={() => {this.containerTouched()}}>
         <View style={styles.mainContent}>
           <TextInput
             ref="textInput"
-            style={styles.searchInput}
+            style={[styles.searchInput,
+             this.state.wrongUserName ? styles.wrongUserNameSearchInput : null]}
             placeholder='Name'
             value={this.state.searchName}
-            onChangeText={(text) => {this.setState({searchName: text})}}
+            onChangeText={(text) => {this.onTextInputTextChange(text)}}
             maxLength={INST_USERNAME_MAX_LENGTH}
             onSubmitEditing={() => {this.onSearchPress()}}
           />
+          <View>
+            <Text style={styles.validationText}>{this.state.wrongUserName ? 'аккаунт не найден' : ' '}</Text>
+          </View>
           <Button
             disabled={this.state.searchButtonDisabled}
             text="поиск"
@@ -86,13 +102,12 @@ var styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 100
   },
   footer: {
     backgroundColor: '#4caf50',
-    justifyContent: 'center',
-    alignItems: 'center',
     alignSelf: 'stretch',
     height: 52
   },
@@ -104,6 +119,13 @@ var styles = StyleSheet.create({
     borderColor: '#4caf50',
     alignSelf: 'stretch',
     paddingHorizontal: 8,
+  },
+  wrongUserNameSearchInput: {
+    borderColor: '#af4c76',
+  },
+  validationText: {
+    color: '#af4c76',
+    fontSize: 12
   }
 });
 
@@ -112,4 +134,4 @@ const mapStateToProps = (state) => {
     selectedUser: state.instagram.selectedUser
   }
 };
-export default connect(mapStateToProps, {initVkCredentialsOffline, selectUser})(SearchScene);
+export default connect(mapStateToProps, {initVkCredentialsLocal, selectUser})(SearchScene);

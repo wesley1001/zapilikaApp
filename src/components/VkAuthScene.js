@@ -14,7 +14,7 @@ import {
 } from '../api/vkApi';
 
 import {connect} from 'react-redux';
-import {fetchVkCredentialsAuth} from '../redux/actions/vkActions';
+import {fetchVkCredentialsOnline} from '../redux/actions/vkActions';
 import {Actions} from 'react-native-router-flux';
 
 class VkAuthScene extends Component {
@@ -29,27 +29,27 @@ class VkAuthScene extends Component {
     //prevent multiple events for same urls
     if (nav.url === this.state.currentUrl) return;
 
-    if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {
-      console.log('on nav changed here!');
-      this.props.fetchVkCredentialsAuth(nav.url)
+    if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {      
+      this.props.fetchVkCredentialsOnline(nav.url)
         .then(() => {
             Actions.pop();
-            vkEmitter.emit(VK_EVENTS.AUTHORIZED_SUCCESS, this.props.vk.credentials);
+            vkEmitter.emit(VK_EVENTS.AUTHORIZED_SUCCESS);
           }
         )
-        .catch(() => {
+        .catch((err) => {
+          console.log('error');
             Actions.pop();
-            vkEmitter.emit(VK_EVENTS.AUTHORIZED_FAILED);
+            vkEmitter.emit(VK_EVENTS.AUTHORIZED_FAILED, err);
           }
         );
-
+      
       this.setState({currentUrl: nav.url});
     }
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[this.props.layoutStyle, styles.container]}>
         <WebView
           style={styles.web}
           source={{uri: VK_ENDPOINTS.authorize()}}
@@ -68,14 +68,8 @@ const styles = StyleSheet.create({
     alignItems: 'stretch'
   },
   web: {
-    height: 100,
+    height: 100
   }
 });
 
-export const mapStateToProps = (state) => {
-  return {
-    vk: state.vk
-  }
-};
-
-export default connect(mapStateToProps, {fetchVkCredentialsAuth})(VkAuthScene);
+export default connect(null, {fetchVkCredentialsOnline})(VkAuthScene);

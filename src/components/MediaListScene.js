@@ -5,8 +5,10 @@ import React, {
   TouchableOpacity,
   StyleSheet,
   Text,
+  Alert,
   ListView,
   PixelRatio,
+  InteractionManager
 } from 'react-native';
 
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
@@ -25,7 +27,6 @@ class MediaListScene extends Component {
     var listViewDataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
-
     this.state = {
       listViewDataSource: listViewDataSource,
       loaded: false
@@ -33,13 +34,15 @@ class MediaListScene extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchRecentUserMedia(this.props.selectedUser.id)
-      .then(() => {
-        this.setState({
-          listViewDataSource: this.state.listViewDataSource.cloneWithRows(this.props.recentUserMedia),
-          loaded: true
+    InteractionManager.runAfterInteractions(() => {
+      this.props.fetchRecentUserMedia(this.props.selectedUser.id)
+        .then(() => {
+          this.setState({
+            listViewDataSource: this.state.listViewDataSource.cloneWithRows(this.props.recentUserMedia),
+            loaded: true
+          });
         });
-      });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,8 +56,8 @@ class MediaListScene extends Component {
   }
 
   onMakeCollageButtonPress() {
-    if(this.props.selectedMediaItemsCount < 4) {
-      alert('выберете больше 4 фото!');
+    if (this.props.selectedMediaItemsCount < 4) {
+      Alert.alert('','выберите больше 4 фото!');
       return;
     }
     Actions.collage();
@@ -73,6 +76,13 @@ class MediaListScene extends Component {
 
   renderListView() {
     if (!this.state.loaded) return <LoadingIndicator animating={!this.state.loaded}/>;
+    if (this.props.recentUserMedia.length === 0) {
+      return (
+        <View style={styles.noUserMediaBox}>
+          <Text style={styles.noUserMediaText}>у пользователя нет фотографий</Text>
+        </View>
+      );
+    }
 
     return (
       <ListView
@@ -100,6 +110,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: '#EFEFF4'
   },
+  noUserMediaBox: {
+    flex: 1,
+    paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noUserMediaText: {
+    fontSize: 18,
+    textAlign: 'center',
+    opacity: 0.4
+  },
   listView: {
     padding: 8,
   },
@@ -116,4 +137,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, {fetchRecentUserMedia,eraseSelectedMediaItems})(MediaListScene);
+export default connect(mapStateToProps, {fetchRecentUserMedia, eraseSelectedMediaItems})(MediaListScene);

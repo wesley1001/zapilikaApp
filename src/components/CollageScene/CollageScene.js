@@ -7,7 +7,7 @@ import React, {
   StyleSheet,
   UIManager,
   Dimensions,
-  Imagea
+  Alert
 } from 'react-native';
 import RNShakeEventIOS from 'react-native-shake-event-ios';
 import Animatable from 'react-native-animatable';
@@ -36,21 +36,21 @@ class CollageScene extends Component {
     this.state = {
       imgOrdersArr: imgOrdersArr,
       curImgOrder: 0,
-      imgUri: null
+      snapShotUri: null
 
     };
   }
 
   componentDidMount() {
     RNShakeEventIOS.addEventListener('shake', () => {
-      this.onNextImages();
+      this.nextImages();
     });
 
-    vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, (credentials) => {
-      sharePhoto(this.state.imgUri, credentials);
+    vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, () => {
+      sharePhoto(this.state.imgUri, this.props.vk.credentials);
     });
-    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, () => {
-      alert('ошибка авторизации')
+    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, (err) => {
+      Alert.alert(':(','авторизация отменена')
     });
   }
 
@@ -58,23 +58,25 @@ class CollageScene extends Component {
     RNShakeEventIOS.removeEventListener('shake');
   }
 
-  onShareButtonPress() {
-    UIManager
+  makeSnapShot() {
+    return UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
-      .then((imgUri) => {
-          this.setState({imgUri: imgUri});
-
-          if (this.props.vk.authorized) {
-            sharePhoto(imgUri, this.props.vk.credentials);
-          } else {
-            Actions.vkAuth();
-          }
-        }
-      )
-      .catch((error) => alert(error));
+      .then((snapShotUri) => this.setState({snapShotUri: snapShotUri}))
+      .catch((err) => alert(err));
   }
 
-  onNextImages() {
+  onShareButtonPress() {
+    this.makeSnapShot()
+      .then(() => {
+        if (this.props.vk.authorized) {
+          sharePhoto(this.state.snapShotUri, this.props.vk.credentials);
+        } else {
+          Actions.vkAuth();
+        }
+      });
+  }
+
+  nextImages() {
     //animate collage
     this.refs.animatedView.tada(800);
 
@@ -116,9 +118,10 @@ class CollageScene extends Component {
             <Collage ref="collage" images={imagesUrls}/>
           </Animatable.View>
         </View>
-        <View style={styles.textBox}>
-          <Text style={styles.text}>потряси чтоб сменить</Text>
-          <Image source={require('./img/shake.png')} style={{width: 100, height: 100, opacity: 0.2}}/>
+        <View style={styles.shakeInfoBox}>
+          <Text style={styles.shakeInfoText}>потряси чтобы сменить</Text>
+          <Image source={require('./img/shake.png')}
+                 style={styles.shakeInfoImage}/>
         </View>
         <FooterButton
           text="Зашарить!"
@@ -141,15 +144,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textBox: {
+  shakeInfoBox: {
     paddingHorizontal: 50,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  text: {
+  shakeInfoText: {
     fontSize: 16,
     opacity: 0.5,
+    textAlign: 'center'
+  },
+  shakeInfoImage: {
+    width: 100,
+    height: 100,
+    opacity: 0.2
   },
   collageBox: {
     height: deviceWidth,
@@ -159,12 +168,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-    backgroundColor: 'gray'
   }
 });
 

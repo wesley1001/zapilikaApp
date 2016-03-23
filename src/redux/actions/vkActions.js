@@ -1,19 +1,21 @@
 'use strict';
-export const FETCH_VK_CREDENTIALS_AUTH = 'FETCH_VK_CREDENTIALS_AUTH';
-export const GET_OFFLINE_VK_CREDENTIALS = 'GET_OFFLINE_VK_CREDENTIALS';
+import Store from 'react-native-store';
 import {parseTokenUrl} from '../../api/vkApi';
 
-import Store from 'react-native-store';
+export const FETCH_VK_CREDENTIALS_ONLINE = 'FETCH_VK_CREDENTIALS_ONLINE';
+export const INIT_VK_CREDENTIALS_LOCAL = 'INIT_VK_CREDENTIALS_LOCAL';
+
 const DB = {
   vk: Store.model('vk')
 };
 
-export const initVkCredentialsOffline = () => {
+export const initVkCredentialsLocal = () => {
+  //get vk credentials from phone local storage if them exists
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
       if(vkData) {
         dispatch({
-          type:GET_OFFLINE_VK_CREDENTIALS,
+          type:INIT_VK_CREDENTIALS_LOCAL,
           credentials: vkData,
           authorized: true,
         });
@@ -23,28 +25,31 @@ export const initVkCredentialsOffline = () => {
 };
 
 
-export const fetchVkCredentialsAuth = (url) => {
-  return function (dispatch, getState) {
-
-    //todo add user_denied
+export const fetchVkCredentialsOnline = (url) => {
+  //online authorization
+  return (dispatch) => {    
     var credentials = parseTokenUrl(url);
-
+    
+    //error handling
     if (!credentials.access_token || !credentials.user_id) {
-      console.log(this);
-      return Promise.Reject();
+      if(credentials.error && credentials.error  === 'access_denied') {
+        return Promise.reject('отмена авторизации');
+      } else {
+        return Promise.reject('ошибка авторизации');
+      }
     }
-
+    //add credentials to local phone store
     DB.vk.findById(1).then((vkData) => {
       if(!vkData) {
-        //handle first time adding data to the application storage;
+        //handle first time adding data;
         DB.vk.add(credentials) }
       else {
         DB.vk.updateById(credentials,1)
       }
     });
-    console.log('here');
+
     return Promise.resolve(dispatch({
-      type: FETCH_VK_CREDENTIALS_AUTH,
+      type: FETCH_VK_CREDENTIALS_ONLINE,
       authorized: true,
       credentials: credentials
     }));

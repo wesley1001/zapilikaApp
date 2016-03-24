@@ -140,8 +140,6 @@ const styles = StyleSheet.create({
     paddingBottom: 48
   },
   errorBox: {
-    borderWidth: 2,
-    borderColor: 'red',
     flex: 1,
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),
     alignItems: 'center',

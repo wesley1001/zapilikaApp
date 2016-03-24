@@ -17,6 +17,6 @@ export const ERROR_TYPES = {
   noInternet: {type: 'noInternet', message: 'кажется пропал интернет'},
   userNotExist: {type: 'userNotExist', message: 'пользователя не существует'},
   userSelectError: {type: 'userFindError', message: 'не удалось найти пользователя'},
-  userDataNowAllowed: {type: 'userDataNowAllowed', message: 'фотографии пользователя недоступны'},
+  userDataNowAllowed: {type: 'userDataNowAllowed', message: 'фотографии недоступны'},
   userNotHaveMediaData: {type: 'userNotHaveMediaData' , message: 'у пользователя нет фотографий'}
 };

@@ -81,6 +81,8 @@ class SearchScene extends Component {
             style={[styles.searchInput,
              this.state.wrongUserName ? styles.wrongUserNameSearchInput : null]}
             placeholder='Name'
+            autoCorrect={false}
+            autoCapitalize="none"
             value={this.state.searchName}
             onChangeText={(text) => {this.onTextInputTextChange(text)}}
             maxLength={INST_USERNAME_MAX_LENGTH}

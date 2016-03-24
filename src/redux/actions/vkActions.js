@@ -39,6 +39,7 @@ export const fetchVkCredentialsOnline = (url) => {
         return Promise.reject('ошибка авторизации');
       }
     }
+    
     //add credentials to local phone store
     DB.vk.findById(1).then((vkData) => {
       if(!vkData) {
@@ -48,6 +49,8 @@ export const fetchVkCredentialsOnline = (url) => {
         DB.vk.updateById(credentials,1)
       }
     });
+    
+    
 
     return Promise.resolve(dispatch({
       type: FETCH_VK_CREDENTIALS_ONLINE,

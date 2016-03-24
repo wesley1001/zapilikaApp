@@ -10,6 +10,7 @@ const LoadingIndicator = ({animating}) => {
     <View style={styles.indicatorBox}>
       <ActivityIndicatorIOS
         animating={animating}
+        color="#4caf50"
         style={styles.indicator}
         size="large"/>
     </View>

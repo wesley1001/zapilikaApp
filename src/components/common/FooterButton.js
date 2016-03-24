@@ -34,7 +34,8 @@ export default class FooterButton extends Component {
     return (
       <View style={styles.buttonBox}>
         <TouchableOpacity
-          style={styles.button}
+          disabled={this.props.disabled}
+          style={[styles.button, this.props.disabled ? styles.disabledButton : null]}
           activeOpacity={0.6}
           onPress={() => {this.onPress()}}>
           <Text style={styles.text}>
@@ -48,13 +49,15 @@ export default class FooterButton extends Component {
 
 FooterButton.propTypes = {
   text: React.PropTypes.string,
-  onPress: React.PropTypes.func
+  onPress: React.PropTypes.func,
+  disabled: React.PropTypes.bool
 };
 
 FooterButton.defaultProps = {
   text: 'Footer Button',
   onPress: () => {
-  }
+  },
+  disabled: false
 };
 
 const styles = StyleSheet.create({
@@ -71,6 +74,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
+  },
+  disabledButton: {
+    backgroundColor: '#9bbaae'
   },
   text: {
     fontSize: 16,

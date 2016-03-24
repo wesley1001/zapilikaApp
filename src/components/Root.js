@@ -12,6 +12,7 @@ import SearchScene from './SearchScene';
 import MediaListScene from './MediaListScene';
 import CollageScene from './CollageScene/CollageScene';
 import VkAuthScene from './VkAuthScene';
+import VkPostScene from './VkPostScene';
 
 function renderBackButton() {
   return <BackButton {...this.props}/>;
@@ -35,6 +36,7 @@ const scenes = Actions.create(
     <Scene key="mediaList" component={MediaListScene} title="Каталог"/>
     <Scene key="collage" component={CollageScene} title="Коллаж"/>
     <Scene key="vkAuth" direction="vertical" component={VkAuthScene}/>
+    <Scene key="vkPost" component={VkPostScene} title="Зашарено"/>
   </Scene >
 );
 

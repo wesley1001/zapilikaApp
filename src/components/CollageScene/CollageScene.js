@@ -16,6 +16,7 @@ import Animatable from 'react-native-animatable';
 import FooterButton from './../common/FooterButton';
 import Collage from './Collage';
 import ShakeInfoBox from './ShakeInfoBox/ShakeInfoBox';
+import LoadingIndicator from '../common/LoadingIndicator';
 
 import {sharePhoto} from '../../api/vkApi';
 import Permutations from '../../helpers/permutations';
@@ -28,21 +29,20 @@ import {ACCESS_DENIED} from '../../redux/actions/vkActions';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
-const deviceAspectRatio = deviceHeight/deviceWidth;
+const deviceAspectRatio = deviceHeight / deviceWidth;
 const SMALL_DEVICES_ASPECT_RATIO = 1.5;
-
 
 class CollageScene extends Component {
   constructor(props) {
     super(props);
-
     var imgOrdersArr = new Permutations(this.props.selectedMediaItems.length, 4).process();
     imgOrdersArr = _.shuffle(imgOrdersArr);
 
     this.state = {
       imgOrdersArr: imgOrdersArr,
       curImgOrder: 0,
-      snapShotUri: null
+      snapShotUri: null,
+      isSharing: false
     };
   }
 
@@ -52,7 +52,8 @@ class CollageScene extends Component {
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, () => {
-      sharePhoto(this.state.imgUri, this.props.vk.credentials);
+      sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
+        .then((resp) => console.log(resp));
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, (err) => {
       if (err === ACCESS_DENIED) return;
@@ -64,6 +65,14 @@ class CollageScene extends Component {
     RNShakeEventIOS.removeEventListener('shake');
   }
 
+  share() {
+    sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
+      .then((postUrl) => {
+        Actions.vkPost({postUrl});
+        this.setState({isSharing: false});
+      });
+  }
+
   makeSnapShot() {
     return UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
@@ -72,10 +81,12 @@ class CollageScene extends Component {
   }
 
   onShareButtonPress() {
+    this.setState({isSharing: true});
+
     this.makeSnapShot()
       .then(() => {
         if (this.props.vk.authorized) {
-          sharePhoto(this.state.snapShotUri, this.props.vk.credentials);
+          this.share();
         } else {
           Actions.vkAuth();
         }
@@ -106,7 +117,7 @@ class CollageScene extends Component {
 
     for (var i = 0; i < currentOrder.length; i++) {
       items.push(this.props.selectedMediaItems[currentOrder[i]]);
-    }
+    } 
 
     return items.map((item) => {
       return item.images.standard_resolution.url;
@@ -129,9 +140,22 @@ class CollageScene extends Component {
         </View>
         <FooterButton
           text="Зашарить"
+          disabled={this.state.isSharing}
           onPress={() => {this.onShareButtonPress()}}/>
+        {this.renderSharingIndicator()}
       </View>
     )
+  }
+
+  renderSharingIndicator() {
+    if (this.state.isSharing) {
+      return (
+        <View style={styles.sharingIndicator}>
+          <LoadingIndicator />
+        </View>
+      )
+    }
+    return null;
   }
 }
 
@@ -155,6 +179,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  sharingIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
+  }
 });
 
 const mapStateToProps = (state) => {

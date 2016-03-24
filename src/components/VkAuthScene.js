@@ -42,6 +42,7 @@ class VkAuthScene extends Component {
       this.props.fetchVkCredentialsOnline(nav.url)
         .then(() => {
             Actions.pop();
+            console.log('success');
             vkEmitter.emit(VK_EVENTS.AUTHORIZED_SUCCESS);
           }
         )

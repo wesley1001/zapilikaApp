@@ -9,7 +9,7 @@ function VkEventsEmmiter() {
   this.events = {};
 }
 
-VkEventsEmmiter.prototype.on = function(type, listener) {
+VkEventsEmmiter.prototype.on = function (type, listener) {
   this.events[type] = this.events[type] || [];
   this.events[type].push(listener);
 };
@@ -28,9 +28,6 @@ export const VK_EVENTS = {
 };
 export var vkEmitter = new VkEventsEmmiter();
 
-
-
-
 export const ENDPOINTS = {
   authorize: () => {
     return `https://oauth.vk.com/authorize?client_id=${CLIENT_ID}&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=wall,photos,offline&response_type=token&v=5.45`;
@@ -41,11 +38,13 @@ export const ENDPOINTS = {
   saveWallPhoto: (server, photo, hash, user_id, access_token) => {
     return `${ROOT_API_URL}photos.saveWallPhoto?server=${server}&photo=${photo}&hash=${hash}&user_id=${user_id}&access_token=${access_token}`
   },
-  wallPost: (owner_id, message,photo_id, access_token) => {
+  wallPost: (owner_id, message, photo_id, access_token) => {
     return `${ROOT_API_URL}wall.post?owner_id=${owner_id}&message=${message}&attachments=${photo_id}&access_token=${access_token}`
+  },
+  getPostUrl: (post_id, user_id) => {
+    return `https://vk.com/id${user_id}?w=wall${user_id}_${post_id}%2Fall`
   }
 };
-
 
 export function parseTokenUrl(url) {
   const credMassive = url.match(/(\w+=[^\&]+)/g);
@@ -58,7 +57,6 @@ export function parseTokenUrl(url) {
 
   return credentials;
 }
-
 
 const getUploadServer = (access_token, user_id) => {
   return fetch(ENDPOINTS.getUploadServer(access_token, user_id))
@@ -88,29 +86,35 @@ function saveWallPhoto(server, photo, hash, user_id, access_token) {
     .then((res) => res.response[0]);
 }
 
-function wallPost(owner_id, message,photo_id,access_token) {
-  return fetch(ENDPOINTS.wallPost(owner_id,message,photo_id,access_token))
-  .then((res) => res.text());
+function wallPost(owner_id, message, photo_id, access_token) {
+  return fetch(ENDPOINTS.wallPost(owner_id, message, photo_id, access_token))
+    .then((res) => res.json());
 }
 
+export function sharePhoto(photoUri, credentials) {
+  if (!NetInfo.isConnected) {
+    Alert.alert(':(', 'Кажется пропал интернет');
+    return;
+  }
+  return getUploadServer(credentials.access_token, credentials.user_id)
+    .then((uploadUrl) => {
+      return uploadPhoto(uploadUrl, photoUri)
+        .then((uploadResult) => {
+          return saveWallPhoto(uploadResult.server, uploadResult.photo, uploadResult.hash, credentials.user_id, credentials.access_token)
+            .then((resp) => {
+                return wallPost(resp.owner_id, '#zapilika #appkode', resp.id, credentials.access_token)
+                  .then((resp) => resp.response)
+                  .then((resp) => {
+                    if(resp.post_id) {
+                      console.log('from action:',ENDPOINTS.getPostUrl(resp.post_id, credentials.user_id));
+                      return Promise.resolve(ENDPOINTS.getPostUrl(resp.post_id, credentials.user_id));
+                    }                 
+                  });
 
-export  function sharePhoto(photoUri, credentials) {
-    if(!NetInfo.isConnected)  {
-      Alert.alert(':(','Кажется пропал интернет');
-      return;
-    }
-    getUploadServer(credentials.access_token, credentials.user_id)
-      .then((uploadUrl) => {
-        uploadPhoto(uploadUrl, photoUri)
-          .then((uploadResult) => {
-            saveWallPhoto(uploadResult.server, uploadResult.photo, uploadResult.hash, credentials.user_id, credentials.access_token)
-              .then((resp) => {
-                  wallPost(resp.owner_id, '#zapilika #appkode', resp.id, credentials.access_token)
-                    .then((message) => console.log(message));
-                }
-              );
-          });
-      });
+              }
+            );
+        });
+    });
 }
 
 

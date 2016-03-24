@@ -16,13 +16,13 @@ export default class VkPostScene extends Component {
       renderLoadingIndicatorOnly: true
     }
   }
-  
-  componentDidMount() {
 
+  componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({renderLoadingIndicatorOnly: false})
     });
   }
+
   render() {
     return (
       <View style={[this.props.layoutStyle, styles.container]}>
@@ -51,10 +51,7 @@ VkPostScene.PropTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 64,
-    justifyContent: 'flex-start',
-    alignItems: 'stretch'
+    justifyContent: 'flex-start'
   },
   web: {
     height: 100

@@ -20,7 +20,10 @@ function renderBackButton() {
 
 const styles = StyleSheet.create({
   layoutStyle: {
-    paddingTop: 64
+    paddingTop: 64,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch'
   },
   navBar: {
     backgroundColor: '#fff'

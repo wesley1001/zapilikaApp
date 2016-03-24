@@ -1,6 +1,6 @@
 'use strict';
-import {NetInfo, Alert} from 'react-native';
-import {ENDPOINTS as INST_ENDPOINTS} from '../../api/instagramApi';
+import {NetInfo} from 'react-native';
+import {ENDPOINTS, ERROR_TYPES} from '../../api/instagramApi';
 
 export const SELECT_USER = 'SELECT_USER';
 export const FETCH_RECENT_USER_MEDIA = 'FETCH_RECENT_USER_MEDIA';
@@ -18,9 +18,10 @@ export const selectUser = (userName) => {
       return Promise.resolve();
     }
 
+    //check internet Connection
+    if (!NetInfo.isConnected) return Promise.reject(ERROR_TYPES.noInternet);
     //select all users with given userName
-    if (!NetInfo.isConnected) Alert.alert(':(', 'Кажется пропал интернет');
-    return fetch(INST_ENDPOINTS.searchUsers(userNameLowCase))
+    return fetch(ENDPOINTS.searchUsers(userNameLowCase))
       .then((resp) => resp.json())
       .then((respData) => respData.data)
       .then((matchedUsers) => {
@@ -28,41 +29,50 @@ export const selectUser = (userName) => {
         const matchedUser = matchedUsers.find((u) => {
           return u.username === userNameLowCase;
         });
-        
+
         if (!matchedUser) {
-          return Promise.reject(dispatch({
+          dispatch({
             type: SELECT_USER,
             selectedUser: null
-          }));
+          });
+          return Promise.reject(ERROR_TYPES.userNotExist);
         } else {
           return Promise.resolve(dispatch({
             type: SELECT_USER,
             selectedUser: matchedUser
           }));
         }
-      }).catch(() => {
-        return Promise.reject('reject')
-      });
+      })
   }
 };
 
 export const fetchRecentUserMedia = (userId) => {
   return dispatch => {
-    return fetch(INST_ENDPOINTS.fetchRecentUserMedia(userId))
+    //check internet Connection
+    if (!NetInfo.isConnected) return Promise.reject(ERROR_TYPES.noInternet);
+    return fetch(ENDPOINTS.fetchRecentUserMedia(userId))
       .then((resp) => resp.json())
-      .then((respData) => respData.data)
+      .then((resp) => {
+        if (resp.meta.code === 200) {
+          return Promise.resolve(resp.data);
+        } else {
+          return Promise.reject(ERROR_TYPES.userDataNowAllowed)
+        }
+      })
       .then((userMedia) => {
+        if (userMedia.length === 0) {
+          return Promise.reject(ERROR_TYPES.userNotHaveMediaData);
+        }
         //sortMediaData by likes property
         var sortedMedia = userMedia.sort(function (a, b) {
           return b.likes.count - a.likes.count;
         });
 
-        return dispatch({
+        return Promise.resolve(dispatch({
           type: FETCH_RECENT_USER_MEDIA,
           media: sortedMedia
-        })
+        }));
       })
-      .catch(() => {});
   }
 };
 

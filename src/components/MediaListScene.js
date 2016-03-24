@@ -11,6 +11,8 @@ import React, {
   InteractionManager
 } from 'react-native';
 
+import {ERROR_TYPES as INST_ERROR_TYPES} from '../api/instagramApi';
+
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
 import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
@@ -29,19 +31,16 @@ class MediaListScene extends Component {
     });
     this.state = {
       listViewDataSource: listViewDataSource,
+      errorMessage: '',
+      showError: false,
       loaded: false
     }
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.props.fetchRecentUserMedia(this.props.selectedUser.id)
-        .then(() => {
-          this.setState({
-            listViewDataSource: this.state.listViewDataSource.cloneWithRows(this.props.recentUserMedia),
-            loaded: true
-          });
-        });
+      this.fetchData();
+
     });
   }
 
@@ -53,6 +52,39 @@ class MediaListScene extends Component {
 
   componentWillUnmount() {
     this.props.eraseSelectedMediaItems();
+  }
+
+  fetchData() {
+    this.props.fetchRecentUserMedia(this.props.selectedUser.id)
+      .then(() => {
+        this.setState({
+          listViewDataSource: this.state.listViewDataSource.cloneWithRows(this.props.recentUserMedia),
+          loaded: true
+        });
+      })
+      .catch((error) => {
+        switch (error.type) {
+          case INST_ERROR_TYPES.noInternet.type:
+            Alert.alert(':(', INST_ERROR_TYPES.noInternet.message);
+            break;
+          case INST_ERROR_TYPES.userNotHaveMediaData.type:
+          {
+            this.setState({
+              errorMessage: INST_ERROR_TYPES.userNotHaveMediaData.message,
+              showError: true,
+            });
+            break;
+          }
+          case INST_ERROR_TYPES.userDataNowAllowed.type:
+          {
+            this.setState({
+              errorMessage: INST_ERROR_TYPES.userDataNowAllowed.message,
+              showError: true,
+            });
+            break;
+          }
+        }
+      });
   }
 
   onMakeCollageButtonPress() {
@@ -75,14 +107,15 @@ class MediaListScene extends Component {
   }
 
   renderListView() {
-    if (!this.state.loaded) return <LoadingIndicator animating={!this.state.loaded}/>;
-    if (this.props.recentUserMedia.length === 0) {
+    if (this.state.showError) {
       return (
-        <View style={styles.noUserMediaBox}>
-          <Text style={styles.noUserMediaText}>у пользователя нет фотографий</Text>
+        <View style={styles.errorBox}>
+          <Text style={styles.errorText}>{this.state.errorMessage}</Text>
         </View>
       );
     }
+
+    if (!this.state.loaded) return <LoadingIndicator animating={!this.state.loaded}/>;
 
     return (
       <ListView
@@ -91,7 +124,6 @@ class MediaListScene extends Component {
         renderRow={this.renderThumbnail.bind(this)}
       />
     )
-
   }
 
   renderThumbnail(mediaItemData) {
@@ -105,18 +137,17 @@ class MediaListScene extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'flex-end',
-    backgroundColor: '#EFEFF4'
+    paddingBottom: 48
   },
-  noUserMediaBox: {
+  errorBox: {
+    borderWidth: 2,
+    borderColor: 'red',
     flex: 1,
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),
     alignItems: 'center',
     justifyContent: 'center',
   },
-  noUserMediaText: {
+  errorText: {
     fontSize: 18,
     textAlign: 'center',
     opacity: 0.4

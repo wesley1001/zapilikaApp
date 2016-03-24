@@ -83,10 +83,7 @@ class VkAuthScene extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 64,
-    justifyContent: 'flex-start',
-    alignItems: 'stretch'
+    justifyContent: 'flex-start'   
   },
   web: {
     height: 100

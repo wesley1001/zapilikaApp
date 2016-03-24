@@ -9,8 +9,12 @@ import React, {
   Alert
 } from 'react-native';
 
+import {
+  USERNAME_MAX_LENGTH as INST_USERNAME_MAX_LENGTH,
+  ERROR_TYPES as INST_ERROR_TYPES
+} from '../api/instagramApi';
+
 import Button from './common/MainButton';
-const INST_USERNAME_MAX_LENGTH = 30;
 
 import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux';
@@ -34,21 +38,25 @@ class SearchScene extends Component {
   onSearchPress() {
     if (this.state.searchName.length === 0) return;
 
-
     this.setState({searchButtonDisabled: true});
 
     this.props.selectUser(this.state.searchName)
       .then(() => {
-          this.refs.textInput.blur();
-          Actions.mediaList();
-          this.setState({searchButtonDisabled: false});
+        this.refs.textInput.blur();
+        Actions.mediaList();
+        this.setState({searchButtonDisabled: false});
+      })
+      .catch((error) => {
+        switch (error.type) {
+          case INST_ERROR_TYPES.noInternet.type:
+            Alert.alert(':(', INST_ERROR_TYPES.noInternet.message);
+            break;
+          case INST_ERROR_TYPES.userNotExist.type:
+            this.setState({wrongUserName: true});
+            break;
+          default:
+            Alert.alert(':(', INST_ERROR_TYPES.userSelectError.message)
         }
-      )
-      .catch((err) => {
-        console.log(err);
-        this.setState({
-          wrongUserName: true
-        });
         this.setState({searchButtonDisabled: false});
       });
   }
@@ -63,10 +71,9 @@ class SearchScene extends Component {
     this.setState({searchName: text, wrongUserName: false});
   }
 
-
   render() {
     return (
-      <View ref="container" style={[this.props.layoutStyle, styles.container]}
+      <View ref="container" style={this.props.layoutStyle}
             onStartShouldSetResponder={() => {this.containerTouched()}}>
         <View style={styles.mainContent}>
           <TextInput
@@ -94,15 +101,7 @@ class SearchScene extends Component {
   }
 }
 
-
-
-
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: '#EFEFF4'
-  },
   mainContent: {
     flex: 1,
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(20),

@@ -161,10 +161,7 @@ class CollageScene extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#EFEFF4'
   },
   collageBox: {
     paddingVertical: PixelRatio.getPixelSizeForLayoutSize(10),

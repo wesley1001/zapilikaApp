@@ -11,7 +11,7 @@ const DB = {
 };
 
 export const initVkCredentialsLocal = () => {
-  //get vk credentials from phone local storage if them exists
+  //get vk credentials from local storage if its exists
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
       if(vkData) {

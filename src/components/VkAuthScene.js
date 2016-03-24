@@ -34,6 +34,12 @@ class VkAuthScene extends Component {
     });
   }
 
+  componentWillUnmount() {
+    if (!this.props.vk || (this.props.vk && this.props.vk.authorized)) {
+      vkEmitter.emit(VK_EVENTS.AUTHORIZATION_DENIED);
+    }
+  }
+
   onNavigationChange(nav) {
     //prevent multiple events for same urls
     if (nav.url === this.state.currentUrl) return;
@@ -42,14 +48,11 @@ class VkAuthScene extends Component {
       this.props.fetchVkCredentialsOnline(nav.url)
         .then(() => {
             Actions.pop();
-            console.log('success');
-            vkEmitter.emit(VK_EVENTS.AUTHORIZED_SUCCESS);
+            vkEmitter.emit(VK_EVENTS.AUTHORIZATION_SUCCESS);
           }
         )
-        .catch((err) => {
-            console.log('error');
+        .catch(() => {
             Actions.pop();
-            vkEmitter.emit(VK_EVENTS.AUTHORIZED_FAILED, err);
           }
         );
 

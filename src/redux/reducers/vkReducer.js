@@ -1,17 +1,18 @@
 'use strict';
-import {
-  FETCH_VK_CREDENTIALS_ONLINE,
-  INIT_VK_CREDENTIALS_LOCAL
-} from '../actions/vkActions';
+import {ACTION_TYPES} from '../actions/vkActions';
 
 export default (state = {
   credentials: null,
   authorized: false
 }, action) => {
-  switch(action.type) {
-    case FETCH_VK_CREDENTIALS_ONLINE:
-    case INIT_VK_CREDENTIALS_LOCAL:
+  switch (action.type) {
+    case ACTION_TYPES.FETCH_VK_CREDENTIALS_ONLINE:
+    case ACTION_TYPES.INIT_VK_CREDENTIALS_LOCAL:
+      return {...state, credentials: action.credentials, authorized: action.authorized};
+    case ACTION_TYPES.DELETE_VK_CREDENTIALS:
+    {
       return {...state, credentials: action.credentials, authorized: action.authorized}
+    }
   }
   return state;
 };

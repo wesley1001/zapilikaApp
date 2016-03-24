@@ -10,6 +10,7 @@ import React, {
   PixelRatio,
   Alert,
 } from 'react-native';
+
 import RNShakeEventIOS from 'react-native-shake-event-ios';
 import Animatable from 'react-native-animatable';
 
@@ -18,14 +19,14 @@ import Collage from './Collage';
 import ShakeInfoBox from './ShakeInfoBox/ShakeInfoBox';
 import LoadingIndicator from '../common/LoadingIndicator';
 
-import {sharePhoto} from '../../api/vkApi';
+import {sharePhoto, ERRORS as VK_ERRORS} from '../../api/vkApi';
 import Permutations from '../../helpers/permutations';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
 import _ from 'lodash';
 import {vkEmitter, VK_EVENTS} from '../../api/vkApi';
-import {ACCESS_DENIED} from '../../redux/actions/vkActions';
+import {deleteVkCredentials, AUTHORIZATION_DENIED} from '../../redux/actions/vkActions';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -51,13 +52,11 @@ class CollageScene extends Component {
       this.nextImages();
     });
 
-    vkEmitter.on(VK_EVENTS.AUTHORIZED_SUCCESS, () => {
-      sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
-        .then((resp) => console.log(resp));
+    vkEmitter.on(VK_EVENTS.AUTHORIZATION_SUCCESS, () => {
+      this.share();
     });
-    vkEmitter.on(VK_EVENTS.AUTHORIZED_FAILED, (err) => {
-      if (err === ACCESS_DENIED) return;
-      Alert.alert(':(', err);
+    vkEmitter.on(VK_EVENTS.AUTHORIZATION_DENIED, () => {
+      this.setState({isSharing: false});
     });
   }
 
@@ -69,6 +68,20 @@ class CollageScene extends Component {
     sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
       .then((postUrl) => {
         Actions.vkPost({postUrl});
+        this.setState({isSharing: false});
+      })
+      .catch((error) => {
+        switch (error.type) {
+          case VK_ERRORS.authError.type:
+          {
+            this.props.deleteVkCredentials();
+            Actions.vkAuth();
+            break;
+          }
+          default:
+            Alert.alert(':(', error.message);
+            break;
+        }
         this.setState({isSharing: false});
       });
   }
@@ -103,7 +116,7 @@ class CollageScene extends Component {
         curImgOrder: ++this.state.curImgOrder
       });
     } else {
-      //on orders ended
+      //on ordersArray ended
       this.setState({
         imgOrdersArr: _.shuffle(this.state.imgOrdersArr),
         curImgOrder: 0
@@ -117,7 +130,7 @@ class CollageScene extends Component {
 
     for (var i = 0; i < currentOrder.length; i++) {
       items.push(this.props.selectedMediaItems[currentOrder[i]]);
-    } 
+    }
 
     return items.map((item) => {
       return item.images.standard_resolution.url;
@@ -192,4 +205,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps)(CollageScene);
+export default connect(mapStateToProps, {deleteVkCredentials})(CollageScene);

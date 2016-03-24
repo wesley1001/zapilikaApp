@@ -11,7 +11,7 @@ import React, {
 
 import {
   USERNAME_MAX_LENGTH as INST_USERNAME_MAX_LENGTH,
-  ERROR_TYPES as INST_ERROR_TYPES
+  ERRORS as INST_ERRORS
 } from '../api/instagramApi';
 
 import Button from './common/MainButton';
@@ -48,14 +48,14 @@ class SearchScene extends Component {
       })
       .catch((error) => {
         switch (error.type) {
-          case INST_ERROR_TYPES.noInternet.type:
-            Alert.alert(':(', INST_ERROR_TYPES.noInternet.message);
+          case INST_ERRORS.noInternet.type:
+            Alert.alert(':(', INST_ERRORS.noInternet.message);
             break;
-          case INST_ERROR_TYPES.userNotExist.type:
+          case INST_ERRORS.userNotExist.type:
             this.setState({wrongUserName: true});
             break;
           default:
-            Alert.alert(':(', INST_ERROR_TYPES.userSelectError.message)
+            Alert.alert(':(', INST_ERRORS.userSelectError.message)
         }
         this.setState({searchButtonDisabled: false});
       });

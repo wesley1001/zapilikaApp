@@ -1,7 +1,6 @@
 'use strict';
 //Permutations without replacements
 
-
 Permutations.prototype.init = function(n, k){
   this.n = n;
   this.k = k;

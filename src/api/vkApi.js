@@ -5,6 +5,13 @@ export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
 
+export const ERRORS = {
+  noInternet: {type: 'noInternet', message: 'кажется пропал интернет'},
+  authDenied: {type: 'authDenied', message: 'авторизация отменена'},
+  authError: {type: 'authError', message: 'ошибка авторизации'},
+  shareDefaultError: {type: 'shareDefaultError', message: 'не удалось зашарить фото'}
+};
+
 function VkEventsEmmiter() {
   this.events = {};
 }
@@ -23,8 +30,8 @@ VkEventsEmmiter.prototype.emit = function (type, props) {
 };
 
 export const VK_EVENTS = {
-  AUTHORIZED_SUCCESS: 'AUTHORIZED_SUCCESS',
-  AUTHORIZED_FAILED: 'AUTHORIZED_FAILED'
+  AUTHORIZATION_SUCCESS: 'AUTHORIZATION_SUCCESS',
+  AUTHORIZATION_DENIED: 'AUTHORIZATION_DENIED'
 };
 export var vkEmitter = new VkEventsEmmiter();
 
@@ -61,7 +68,13 @@ export function parseTokenUrl(url) {
 const getUploadServer = (access_token, user_id) => {
   return fetch(ENDPOINTS.getUploadServer(access_token, user_id))
     .then((response) => response.json())
-    .then((resp) => resp.response.upload_url)
+    .then((resp) => {
+      if (resp.error) {
+        return Promise.reject(ERRORS.authError);
+      } else {
+        return Promise.resolve(resp.response.upload_url);
+      }
+    })
 };
 
 const uploadPhoto = (uploadUrl, photoUri) => {
@@ -77,40 +90,50 @@ const uploadPhoto = (uploadUrl, photoUri) => {
   return fetch(uploadUrl, {
     method: 'post',
     body: body
-  }).then((response) => response.json());
+  }).then((response) => response.json())
+    .then((res) => {
+      if (res.error) {
+        return Promise.reject(ERRORS.shareDefaultError)
+      } else {
+        return Promise.resolve(res);
+      }
+    });
 };
 
 function saveWallPhoto(server, photo, hash, user_id, access_token) {
   return fetch(ENDPOINTS.saveWallPhoto(server, photo, hash, user_id, access_token))
     .then((response) => response.json())
-    .then((res) => res.response[0]);
+    .then((res) => {
+      if (res.error) {
+        return Promise.reject(ERRORS.shareDefaultError)
+      } else {
+        return Promise.resolve(res.response[0]);//res return array of saved photos, since we save only one -> get first element of array
+      }
+    });
 }
 
 function wallPost(owner_id, message, photo_id, access_token) {
   return fetch(ENDPOINTS.wallPost(owner_id, message, photo_id, access_token))
-    .then((res) => res.json());
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.error) {
+        return Promise.reject(ERRORS.shareDefaultError)
+      } else {
+        return Promise.resolve(ENDPOINTS.getPostUrl(res.response.post_id, owner_id));
+      }
+    });
 }
 
 export function sharePhoto(photoUri, credentials) {
-  if (!NetInfo.isConnected) {
-    Alert.alert(':(', 'Кажется пропал интернет');
-    return;
-  }
+  if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
+
   return getUploadServer(credentials.access_token, credentials.user_id)
     .then((uploadUrl) => {
       return uploadPhoto(uploadUrl, photoUri)
         .then((uploadResult) => {
           return saveWallPhoto(uploadResult.server, uploadResult.photo, uploadResult.hash, credentials.user_id, credentials.access_token)
-            .then((resp) => {
-                return wallPost(resp.owner_id, '#zapilika #appkode', resp.id, credentials.access_token)
-                  .then((resp) => resp.response)
-                  .then((resp) => {
-                    if(resp.post_id) {
-                      console.log('from action:',ENDPOINTS.getPostUrl(resp.post_id, credentials.user_id));
-                      return Promise.resolve(ENDPOINTS.getPostUrl(resp.post_id, credentials.user_id));
-                    }                 
-                  });
-
+            .then((res) => {
+                return wallPost(res.owner_id, '#zapilika #appkode', res.id, credentials.access_token)
               }
             );
         });

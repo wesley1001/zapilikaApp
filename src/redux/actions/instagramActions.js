@@ -1,12 +1,14 @@
 'use strict';
 import {NetInfo} from 'react-native';
-import {ENDPOINTS, ERROR_TYPES} from '../../api/instagramApi';
+import {ENDPOINTS, ERRORS} from '../../api/instagramApi';
 
-export const SELECT_USER = 'SELECT_USER';
-export const FETCH_RECENT_USER_MEDIA = 'FETCH_RECENT_USER_MEDIA';
-export const SELECT_MEDIA_ITEM = 'SELECT_MEDIA_ITEM';
-export const DESELECT_MEDIA_ITEM = 'DESELECT_MEDIA_ITEM';
-export const ERASE_SELECTED_MEDIA_ITEMS = 'ERASE_SELECTED_MEDIA_ITEM';
+export const ACTION_TYPES = {
+  SELECT_USER: 'SELECT_USER',
+  FETCH_RECENT_USER_MEDIA: 'FETCH_RECENT_USER_MEDIA',
+  SELECT_MEDIA_ITEM: 'SELECT_MEDIA_ITEM',
+  DESELECT_MEDIA_ITEM: 'DESELECT_MEDIA_ITEM',
+  ERASE_SELECTED_MEDIA_ITEMS: 'ERASE_SELECTED_MEDIA_ITEM'
+};
 
 export const selectUser = (userName) => {
   return (dispatch, getState) => {
@@ -19,7 +21,7 @@ export const selectUser = (userName) => {
     }
 
     //check internet Connection
-    if (!NetInfo.isConnected) return Promise.reject(ERROR_TYPES.noInternet);
+    if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
     //select all users with given userName
     return fetch(ENDPOINTS.searchUsers(userNameLowCase))
       .then((resp) => resp.json())
@@ -32,13 +34,13 @@ export const selectUser = (userName) => {
 
         if (!matchedUser) {
           dispatch({
-            type: SELECT_USER,
+            type: ACTION_TYPES.SELECT_USER,
             selectedUser: null
           });
-          return Promise.reject(ERROR_TYPES.userNotExist);
+          return Promise.reject(ERRORS.userNotExist);
         } else {
           return Promise.resolve(dispatch({
-            type: SELECT_USER,
+            type: ACTION_TYPES.SELECT_USER,
             selectedUser: matchedUser
           }));
         }
@@ -49,19 +51,19 @@ export const selectUser = (userName) => {
 export const fetchRecentUserMedia = (userId) => {
   return dispatch => {
     //check internet Connection
-    if (!NetInfo.isConnected) return Promise.reject(ERROR_TYPES.noInternet);
+    if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
     return fetch(ENDPOINTS.fetchRecentUserMedia(userId))
       .then((resp) => resp.json())
       .then((resp) => {
         if (resp.meta.code === 200) {
           return Promise.resolve(resp.data);
         } else {
-          return Promise.reject(ERROR_TYPES.userDataNowAllowed)
+          return Promise.reject(ERRORS.userDataNowAllowed)
         }
       })
       .then((userMedia) => {
         if (userMedia.length === 0) {
-          return Promise.reject(ERROR_TYPES.userNotHaveMediaData);
+          return Promise.reject(ERRORS.userNotHaveMediaData);
         }
         //sortMediaData by likes property
         var sortedMedia = userMedia.sort(function (a, b) {
@@ -69,7 +71,7 @@ export const fetchRecentUserMedia = (userId) => {
         });
 
         return Promise.resolve(dispatch({
-          type: FETCH_RECENT_USER_MEDIA,
+          type: ACTION_TYPES.FETCH_RECENT_USER_MEDIA,
           media: sortedMedia
         }));
       })
@@ -78,21 +80,21 @@ export const fetchRecentUserMedia = (userId) => {
 
 export const selectMediaItem = (mediaItem) => {
   return {
-    type: SELECT_MEDIA_ITEM,
+    type: ACTION_TYPES.SELECT_MEDIA_ITEM,
     selectedItem: mediaItem
   }
 };
 
 export const deselectMediaItem = (mediaItem) => {
   return {
-    type: DESELECT_MEDIA_ITEM,
+    type: ACTION_TYPES.DESELECT_MEDIA_ITEM,
     deselectedItem: mediaItem
   }
 };
 
 export const eraseSelectedMediaItems = () => {
   return {
-    type: ERASE_SELECTED_MEDIA_ITEMS,
+    type: ACTION_TYPES.ERASE_SELECTED_MEDIA_ITEMS,
     payload: []
   }
 };

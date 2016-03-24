@@ -11,7 +11,7 @@ import React, {
   InteractionManager
 } from 'react-native';
 
-import {ERROR_TYPES as INST_ERROR_TYPES} from '../api/instagramApi';
+import {ERRORS as INST_ERROR} from '../api/instagramApi';
 
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
 import BackButton from './common/BackButton/BackButton';
@@ -64,21 +64,21 @@ class MediaListScene extends Component {
       })
       .catch((error) => {
         switch (error.type) {
-          case INST_ERROR_TYPES.noInternet.type:
-            Alert.alert(':(', INST_ERROR_TYPES.noInternet.message);
+          case INST_ERROR.noInternet.type:
+            Alert.alert(':(', INST_ERROR.noInternet.message);
             break;
-          case INST_ERROR_TYPES.userNotHaveMediaData.type:
+          case INST_ERROR.userNotHaveMediaData.type:
           {
             this.setState({
-              errorMessage: INST_ERROR_TYPES.userNotHaveMediaData.message,
+              errorMessage: INST_ERROR.userNotHaveMediaData.message,
               showError: true,
             });
             break;
           }
-          case INST_ERROR_TYPES.userDataNowAllowed.type:
+          case INST_ERROR.userDataNowAllowed.type:
           {
             this.setState({
-              errorMessage: INST_ERROR_TYPES.userDataNowAllowed.message,
+              errorMessage: INST_ERROR.userDataNowAllowed.message,
               showError: true,
             });
             break;

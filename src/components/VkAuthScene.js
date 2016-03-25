@@ -24,7 +24,8 @@ class VkAuthScene extends Component {
     super(props);
     this.state = {
       currentUrl: null,
-      renderLoadingIndicatorOnly: true
+      renderLoadingIndicatorOnly: true, //this for better nav transitions
+      isContentLoading: true //this for better user experience
     }
   }
 
@@ -73,22 +74,40 @@ class VkAuthScene extends Component {
       return <LoadingIndicator />
     } else {
       return (
-        <WebView
-          style={styles.web}
-          source={{uri: VK_ENDPOINTS.authorize()}}
-          onNavigationStateChange={(nav) => {this.onNavigationChange(nav)}}
-        />
+        <View style={[this.props.layoutStyle, styles.container]}>
+          <WebView
+            source={{uri: VK_ENDPOINTS.authorize()}}
+            onNavigationStateChange={(nav) => {this.onNavigationChange(nav)}}
+            onLoad={() => {this.setState({isContentLoading: false})}}
+          />
+          {this.renderContentLoadingIndicator()}
+        </View>
       )
     }
+  }
+
+  renderContentLoadingIndicator() {
+    if (this.state.isContentLoading) {
+      return (
+        <View style={styles.contentLoadingIndicator}>
+          <LoadingIndicator />
+        </View>
+      )
+    }
+    return null;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start'
+    paddingTop: 32,
   },
-  web: {
-    height: 100
+  contentLoadingIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
   }
 });
 

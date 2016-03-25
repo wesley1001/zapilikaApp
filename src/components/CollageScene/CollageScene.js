@@ -53,6 +53,7 @@ class CollageScene extends Component {
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_SUCCESS, () => {
+      console.log(this.props.vk);
       this.share();
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_DENIED, () => {
@@ -65,6 +66,8 @@ class CollageScene extends Component {
   }
 
   share() {
+    this.setState({isSharing: true});
+
     sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
       .then((postUrl) => {
         Actions.vkPost({postUrl});
@@ -72,10 +75,10 @@ class CollageScene extends Component {
       })
       .catch((error) => {
         switch (error.type) {
-          case VK_ERRORS.authError.type:          
+          case VK_ERRORS.authError.type:
             this.props.deleteVkCredentials();
             Actions.vkAuth();
-            break;          
+            break;
           default:
             Alert.alert(':(', error.message);
             break;
@@ -92,8 +95,6 @@ class CollageScene extends Component {
   }
 
   onShareButtonPress() {
-    this.setState({isSharing: true});
-
     this.makeSnapShot()
       .then(() => {
         if (this.props.vk.authorized) {
@@ -105,6 +106,7 @@ class CollageScene extends Component {
   }
 
   nextImages() {
+
     //animate collage
     this.refs.animatedView.tada(800);
 

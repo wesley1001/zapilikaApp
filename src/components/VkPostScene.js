@@ -13,7 +13,8 @@ export default class VkPostScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      renderLoadingIndicatorOnly: true
+      renderLoadingIndicatorOnly: true, //this for better nav transitions
+      isContentLoading: true //this for better user experience
     }
   }
 
@@ -36,12 +37,26 @@ export default class VkPostScene extends Component {
       return <LoadingIndicator />
     } else {
       return (
-        <WebView
-          style={styles.web}
-          source={{uri: this.props.postUrl}}
-        />
+        <View style={[this.props.layoutStyle, styles.container]}>
+          <WebView
+            source={{uri: this.props.postUrl}}
+            onLoad={() => {this.setState({isContentLoading: false})}}
+          />
+          {this.renderContentLoadingIndicator()}
+        </View>
       )
     }
+  }
+
+  renderContentLoadingIndicator() {
+    if (this.state.isContentLoading) {
+      return (
+        <View style={styles.contentLoadingIndicator}>
+          <LoadingIndicator />
+        </View>
+      )
+    }
+    return null;
   }
 }
 
@@ -51,9 +66,13 @@ VkPostScene.PropTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start'
+    paddingTop: 32,
   },
-  web: {
-    height: 100
+  contentLoadingIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
   }
 });

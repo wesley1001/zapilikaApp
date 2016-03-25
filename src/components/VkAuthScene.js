@@ -24,8 +24,9 @@ class VkAuthScene extends Component {
     super(props);
     this.state = {
       currentUrl: null,
+      authorizedSuccess: false,
       renderLoadingIndicatorOnly: true, //this for better nav transitions
-      isContentLoading: true //this for better user experience
+      isContentLoading: true, //this for better user experience
     }
   }
 
@@ -36,7 +37,7 @@ class VkAuthScene extends Component {
   }
 
   componentWillUnmount() {
-    if (!this.props.vk || (this.props.vk && this.props.vk.authorized)) {
+    if (!this.state.authorizedSuccess) {
       vkEmitter.emit(VK_EVENTS.AUTHORIZATION_DENIED);
     }
   }
@@ -48,8 +49,9 @@ class VkAuthScene extends Component {
     if (~nav.url.search(AUTHORIZATION_PROCESSED_URL)) {
       this.props.fetchVkCredentialsOnline(nav.url)
         .then(() => {
-            Actions.pop();
+            this.setState({authorizedSuccess: true});
             vkEmitter.emit(VK_EVENTS.AUTHORIZATION_SUCCESS);
+            Actions.pop();
           }
         )
         .catch(() => {

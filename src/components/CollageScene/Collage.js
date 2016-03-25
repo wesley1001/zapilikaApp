@@ -54,9 +54,8 @@ const styles = StyleSheet.create({
     width: deviceWidth - PixelRatio.getPixelSizeForLayoutSize(20),
     flexDirection: 'column',
     backgroundColor: '#FFF',
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
-    padding: 1
   },
   imagesBox: {
     flex: 5,

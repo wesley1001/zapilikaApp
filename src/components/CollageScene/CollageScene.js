@@ -53,7 +53,6 @@ class CollageScene extends Component {
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_SUCCESS, () => {
-
       this.share();
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_DENIED, () => {
@@ -68,9 +67,8 @@ class CollageScene extends Component {
   }
 
   share() {
-
     this.setState({isSharing: true});
-    console.log('set', this.state.isSharing);
+
     sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
       .then((postUrl) => {
         Actions.vkPost({postUrl});

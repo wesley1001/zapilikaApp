@@ -6,12 +6,24 @@ import React, {
   Image,
   Text,
   Dimensions,
-  PixelRatio
+  PixelRatio,
+  ActivityIndicatorIOS
 } from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
 
 export default class Collage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLeftTopImgLoading: true,
+      isLeftBotImgLoading: true,
+      isRightTopImgLoading: true,
+      isRightBotImgLoading: true
+    }
+  }
+
   render() {
     if (this.props.images.length < 4) return null;
 
@@ -21,26 +33,44 @@ export default class Collage extends Component {
           <View style={styles.leftCol}>
             <Image
               source={{uri: this.props.images[0]}}
-              style={styles.leftTopImg}
-            />
+              style={[styles.img, styles.leftTopImg]}
+              onLoad={() => {this.setState({isLeftTopImgLoading: false})}}
+            >
+              {this.renderLoadingIndicator(this.state.isLeftTopImgLoading)}
+            </Image>
             <Image
               source={{uri: this.props.images[1]}}
-              style={styles.leftBotImg}
-            />
+              style={[styles.img,styles.leftBotImg]}
+              onLoad={() => {this.setState({isLeftBotImgLoading: false})}}
+            >
+              {this.renderLoadingIndicator(this.state.isLeftBotImgLoading)}
+            </Image>
           </View>
           <View style={styles.rightCol}>
             <Image
               source={{uri: this.props.images[2]}}
-              style={styles.rightTopImg}
-            />
+              style={[styles.img,styles.rightTopImg]}
+              onLoad={() => {this.setState({isRightTopImgLoading: false})}}
+            >
+              {this.renderLoadingIndicator(this.state.isRightTopImgLoading)}
+            </Image>
             <Image
               source={{uri: this.props.images[3]}}
-              style={styles.rightBotImg}
-            />
+              style={[styles.img,styles.rightBotImg]}
+              onLoad={() => {this.setState({isRightBotImgLoading: false})}}
+            >
+              {this.renderLoadingIndicator(this.state.isRightBotImgLoading)}
+            </Image>
           </View>
         </View>
       </View>
     )
+  }
+  renderLoadingIndicator(isLoading) {
+    return isLoading ? <ActivityIndicatorIOS
+      color="#4caf50"
+      size="small"
+    /> : null;
   }
 }
 
@@ -78,6 +108,10 @@ const styles = StyleSheet.create({
   rightCol: {
     flex: 2,
     alignItems: 'stretch',
+  },
+  img: {
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   leftTopImg: {
     backgroundColor: 'gray',

@@ -5,7 +5,8 @@ import React, {
   TouchableOpacity,
   Image,
   StyleSheet,
-  PixelRatio
+  PixelRatio,
+  ActivityIndicatorIOS
 } from 'react-native';
 
 import moment from 'moment';
@@ -13,17 +14,17 @@ import {truncateStr} from '../../helpers/helpers';
 import {connect} from 'react-redux';
 import {selectMediaItem, deselectMediaItem} from '../../redux/actions/instagramActions';
 
-
-
 class MediaItemThumbnail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: false
+      checked: false,
+      isImgLoading: true
     }
   }
 
   onPressThumbnail() {
+    if (this.state.isImgLoading) return;
     this.setState({checked: !this.state.checked});
   }
 
@@ -34,9 +35,6 @@ class MediaItemThumbnail extends Component {
 
   render() {
     const data = this.props.data;
-    const creationDate = moment.unix(data.created_time).format('DD MMM YYYY');
-    const checkIcon = this.state.checked ?
-      require('./img/select_1.png') : require('./img/select_0.png');
 
     return (
       <View style={styles.shadowBox1}>
@@ -48,42 +46,68 @@ class MediaItemThumbnail extends Component {
             <Image
               style={styles.image}
               source={{uri: data.images.standard_resolution.url}}
+              onLoad={() => {this.setState({isImgLoading: false})}}
             >
-              <Image
-                style={styles.checkImage}
-                source={checkIcon}
-              />
+              {this.renderCheckIcon()}
             </Image>
-            <View style={styles.footerBox}>
-              <View style={styles.captionBox}>
-                <View style={styles.titleBox}>
-                  <Text style={styles.titleText}>
-                    {truncateStr(data.caption ? data.caption.text : ' ', 22)}
-                  </Text>
-                </View>
-                <View style={styles.dateBox}>
-                  <Text style={styles.dateText}>
-                    {creationDate}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.likesBox}>
-                <Image
-                  style={styles.likesImage}
-                  source={require('./img/heart_icon.png')}/>
-                <Text style={styles.likesText}>
-                  {data.likes.count}
-                </Text>
-              </View>
-            </View>
+            {this.renderFooter(data)}
           </TouchableOpacity>
         </View>
       </View>
     )
   }
+
+  renderCheckIcon() {
+    const checkIconSource = this.state.checked ?
+      require('./img/select_1.png') : require('./img/select_0.png');
+
+    return this.state.isImgLoading ?
+      <ActivityIndicatorIOS color="#4caf50" size="small"/> :
+      <Image style={styles.checkImage} source={checkIconSource}/>
+  }
+
+  renderFooter(data) {
+    return (
+      <View style={styles.footerBox}>
+        {this.renderCaptionBox(data)}
+        {this.renderLikesBox(data)}
+      </View>
+    )
+  }
+
+  renderCaptionBox(data) {
+    const creationDate = moment.unix(data.created_time).format('DD MMM YYYY');
+
+    return (
+      <View>
+        <View style={styles.titleBox}>
+          <Text style={styles.titleText}>
+            {truncateStr(data.caption ? data.caption.text : ' ', 22)}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.dateText}>
+            {creationDate}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+
+  renderLikesBox(data) {
+    return (
+      <View style={styles.likesBox}>
+        <Image
+          style={styles.likesImage}
+          source={require('./img/heart_icon.png')}/>
+        <Text style={styles.likesText}>
+          {data.likes.count}
+        </Text>
+      </View>
+    )
+  }
 }
 
-//todo figure out padding, delete unnecessary boxes, image size!
 const styles = StyleSheet.create({
   shadowBox1: {
     borderRadius: 4,
@@ -109,7 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     overflow: 'hidden'
   },
-  imageBox: {},
   image: {
     height: 120,
     justifyContent: 'center',
@@ -126,7 +149,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: PixelRatio.getPixelSizeForLayoutSize(8),
     paddingTop: PixelRatio.getPixelSizeForLayoutSize(4),
   },
-  captionBox: {},
   titleBox: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -137,7 +159,6 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 20,
   },
-  dateBox: {},
   dateText: {
     paddingTop: 8,
     fontFamily: 'HelveticaNeue-Light',
@@ -158,7 +179,10 @@ const styles = StyleSheet.create({
     fontFamily: 'HelveticaNeue-Light',
     fontSize: 12
   }
-
 });
+
+MediaItemThumbnail.PropTypes = {
+  data: React.PropTypes.any.isRequired
+};
 
 export default connect(null, {selectMediaItem, deselectMediaItem})(MediaItemThumbnail);

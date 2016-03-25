@@ -15,7 +15,6 @@ const deviceWidth = Dimensions.get('window').width;
 export default class Collage extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isLeftTopImgLoading: true,
       isLeftBotImgLoading: true,

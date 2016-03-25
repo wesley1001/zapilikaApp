@@ -1,5 +1,10 @@
 'use strict';
 //Permutations without replacements
+export default function Permutations(n, k) {
+  if (k == undefined || n == undefined) return;
+  return this.init(n, k);
+}
+
 
 Permutations.prototype.init = function(n, k){
   this.n = n;
@@ -89,8 +94,5 @@ Permutations.prototype.process = function(){
 };
 
 
-export default function Permutations(n, k) {
-  if (k == undefined || n == undefined) return;
-  return this.init(n, k);
-}
+
 

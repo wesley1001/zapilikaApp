@@ -9,16 +9,16 @@ export const ERRORS = {
   shareDefaultError: {type: 'shareDefaultError', message: 'не удалось зашарить фото'}
 };
 
-function VkEventsEmmiter() {
+function VkEventsEmitter() {
   this.events = {};
 }
 
-VkEventsEmmiter.prototype.on = function (type, listener) {
+VkEventsEmitter.prototype.on = function (type, listener) {
   this.events[type] = this.events[type] || [];
   this.events[type].push(listener);
 };
 
-VkEventsEmmiter.prototype.emit = function (type, props) {
+VkEventsEmitter.prototype.emit = function (type, props) {
   if (this.events[type]) {
     this.events[type].forEach(function (listener) {
       listener(props);
@@ -26,7 +26,7 @@ VkEventsEmmiter.prototype.emit = function (type, props) {
   }
 };
 
-VkEventsEmmiter.prototype.removeAllEventListeners = function (type) {
+VkEventsEmitter.prototype.removeAllEventListeners = function (type) {
   if (this.events[type]) {
     this.events[type] = [];
   }
@@ -36,7 +36,8 @@ export const VK_EVENTS = {
   AUTHORIZATION_SUCCESS: 'AUTHORIZATION_SUCCESS',
   AUTHORIZATION_DENIED: 'AUTHORIZATION_DENIED'
 };
-export var vkEmitter = new VkEventsEmmiter();
+
+export const vkEmitter = new VkEventsEmitter();
 
 export const ENDPOINTS = {
   authorize: () => {
@@ -56,26 +57,16 @@ export const ENDPOINTS = {
   }
 };
 
-export function parseTokenUrl(url) {
-  const credMassive = url.match(/(\w+=[^\&]+)/g);
-  var credentials = {};
 
-  for (let i = 0; i < credMassive.length; i++) {
-    var credential = credMassive[i].split('=');
-    credentials[credential[0]] = credential[1];
-  }
-
-  return credentials;
-}
 
 const getUploadServer = (access_token, user_id) => {
   return fetch(ENDPOINTS.getUploadServer(access_token, user_id))
     .then((response) => response.json())
-    .then((resp) => {
-      if (resp.error) {
+    .then((res) => {
+      if (res.error) {
         return Promise.reject(ERRORS.authError);
-      } else {
-        return Promise.resolve(resp.response.upload_url);
+      } else {      
+        return Promise.resolve(res.response.upload_url);
       }
     })
 };
@@ -141,4 +132,15 @@ export function sharePhoto(photoUri, credentials) {
     });
 }
 
+export function parseTokenUrl(url) {
+  //get data from vk.com redirect uri response and parse it to credentials object
+  const credMassive = url.match(/(\w+=[^\&]+)/g);
+  let credentials = {};
 
+  for (let i = 0; i < credMassive.length; i++) {
+    const credential = credMassive[i].split('=');
+    credentials[credential[0]] = credential[1];
+  }
+
+  return credentials;
+}

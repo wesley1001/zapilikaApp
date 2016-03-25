@@ -18,11 +18,9 @@ export const initVkCredentialsLocal = () => {
   return function (dispatch) {
     DB.vk.findById(1).then((vkData) => {
       if (vkData) {
-
-        var corruptedData= vkData.access_token = '1234';
         dispatch({
           type: ACTION_TYPES.INIT_VK_CREDENTIALS_LOCAL,
-          credentials: corruptedData,
+          credentials: vkData,
           authorized: true,
         });
       }

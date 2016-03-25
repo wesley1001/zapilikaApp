@@ -1,12 +1,9 @@
 'use strict';
-
-import {Alert, NetInfo} from 'react-native';
 export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
 
 export const ERRORS = {
-  noInternet: {type: 'noInternet', message: 'кажется пропал интернет'},
   authDenied: {type: 'authDenied', message: 'авторизация отменена'},
   authError: {type: 'authError', message: 'ошибка авторизации'},
   shareDefaultError: {type: 'shareDefaultError', message: 'не удалось зашарить фото'}
@@ -125,8 +122,6 @@ function wallPost(owner_id, message, photo_id, access_token) {
 }
 
 export function sharePhoto(photoUri, credentials) {
-  if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
-
   return getUploadServer(credentials.access_token, credentials.user_id)
     .then((uploadUrl) => {
       return uploadPhoto(uploadUrl, photoUri)

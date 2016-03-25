@@ -72,12 +72,10 @@ class CollageScene extends Component {
       })
       .catch((error) => {
         switch (error.type) {
-          case VK_ERRORS.authError.type:
-          {
+          case VK_ERRORS.authError.type:          
             this.props.deleteVkCredentials();
             Actions.vkAuth();
-            break;
-          }
+            break;          
           default:
             Alert.alert(':(', error.message);
             break;

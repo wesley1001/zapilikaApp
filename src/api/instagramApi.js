@@ -13,8 +13,7 @@ export const ENDPOINTS = {
   }
 };
 
-export const ERRORS = {
-  noInternet: {type: 'noInternet', message: 'кажется пропал интернет'},
+export const ERRORS = {  
   userNotExist: {type: 'userNotExist', message: 'пользователя не существует'},
   userSelectError: {type: 'userFindError', message: 'не удалось найти пользователя'},
   userDataNowAllowed: {type: 'userDataNowAllowed', message: 'фотографии недоступны'},

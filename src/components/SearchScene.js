@@ -47,10 +47,7 @@ class SearchScene extends Component {
         this.setState({searchButtonDisabled: false});
       })
       .catch((error) => {
-        switch (error.type) {
-          case INST_ERRORS.noInternet.type:
-            Alert.alert(':(', INST_ERRORS.noInternet.message);
-            break;
+        switch (error.type) {       
           case INST_ERRORS.userNotExist.type:
             this.setState({wrongUserName: true});
             break;

@@ -63,10 +63,7 @@ class MediaListScene extends Component {
         });
       })
       .catch((error) => {
-        switch (error.type) {
-          case INST_ERROR.noInternet.type:
-            Alert.alert(':(', INST_ERROR.noInternet.message);
-            break;
+        switch (error.type) {         
           case INST_ERROR.userNotHaveMediaData.type:
           {
             this.setState({

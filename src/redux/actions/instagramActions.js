@@ -13,15 +13,12 @@ export const ACTION_TYPES = {
 export const selectUser = (userName) => {
   return (dispatch, getState) => {
     const userNameLowCase = userName.toLowerCase();
-
     // prevent from searching  already selected user
     if (getState().instagram.selectedUser &&
       getState().instagram.selectedUser.username === userNameLowCase) {
       return Promise.resolve();
     }
 
-    //check internet Connection
-    if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
     //select all users with given userName
     return fetch(ENDPOINTS.searchUsers(userNameLowCase))
       .then((resp) => resp.json())
@@ -50,8 +47,6 @@ export const selectUser = (userName) => {
 
 export const fetchRecentUserMedia = (userId) => {
   return dispatch => {
-    //check internet Connection
-    if (!NetInfo.isConnected) return Promise.reject(ERRORS.noInternet);
     return fetch(ENDPOINTS.fetchRecentUserMedia(userId))
       .then((resp) => resp.json())
       .then((resp) => {

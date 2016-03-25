@@ -34,6 +34,7 @@ export default class Collage extends Component {
             <Image
               source={{uri: this.props.images[0]}}
               style={[styles.img, styles.leftTopImg]}
+              onLoadStart={() => {this.setState({isLeftTopImgLoading: true})}}
               onLoad={() => {this.setState({isLeftTopImgLoading: false})}}
             >
               {this.renderLoadingIndicator(this.state.isLeftTopImgLoading)}
@@ -41,6 +42,7 @@ export default class Collage extends Component {
             <Image
               source={{uri: this.props.images[1]}}
               style={[styles.img,styles.leftBotImg]}
+              onLoadStart={() => {this.setState({isLeftBotImgLoading: true})}}
               onLoad={() => {this.setState({isLeftBotImgLoading: false})}}
             >
               {this.renderLoadingIndicator(this.state.isLeftBotImgLoading)}
@@ -50,6 +52,7 @@ export default class Collage extends Component {
             <Image
               source={{uri: this.props.images[2]}}
               style={[styles.img,styles.rightTopImg]}
+              onLoadStart={() => {this.setState({isRightTopImgLoading: true})}}
               onLoad={() => {this.setState({isRightTopImgLoading: false})}}
             >
               {this.renderLoadingIndicator(this.state.isRightTopImgLoading)}
@@ -57,6 +60,7 @@ export default class Collage extends Component {
             <Image
               source={{uri: this.props.images[3]}}
               style={[styles.img,styles.rightBotImg]}
+              onLoadStart={() => {this.setState({isRightBotImgLoading: true})}}
               onLoad={() => {this.setState({isRightBotImgLoading: false})}}
             >
               {this.renderLoadingIndicator(this.state.isRightBotImgLoading)}

@@ -26,6 +26,12 @@ VkEventsEmmiter.prototype.emit = function (type, props) {
   }
 };
 
+VkEventsEmmiter.prototype.removeAllEventListeners = function (type) {
+  if (this.events[type]) {
+    this.events[type] = [];
+  }
+};
+
 export const VK_EVENTS = {
   AUTHORIZATION_SUCCESS: 'AUTHORIZATION_SUCCESS',
   AUTHORIZATION_DENIED: 'AUTHORIZATION_DENIED'

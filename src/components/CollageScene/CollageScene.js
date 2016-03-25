@@ -53,7 +53,7 @@ class CollageScene extends Component {
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_SUCCESS, () => {
-      console.log(this.props.vk);
+
       this.share();
     });
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_DENIED, () => {
@@ -63,11 +63,14 @@ class CollageScene extends Component {
 
   componentWillUnmount() {
     RNShakeEventIOS.removeEventListener('shake');
+    vkEmitter.removeAllEventListeners(VK_EVENTS.AUTHORIZATION_SUCCESS);
+    vkEmitter.removeAllEventListeners(VK_EVENTS.AUTHORIZATION_DENIED);
   }
 
   share() {
-    this.setState({isSharing: true});
 
+    this.setState({isSharing: true});
+    console.log('set', this.state.isSharing);
     sharePhoto(this.state.snapShotUri, this.props.vk.credentials)
       .then((postUrl) => {
         Actions.vkPost({postUrl});

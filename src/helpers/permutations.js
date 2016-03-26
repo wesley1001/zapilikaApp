@@ -58,6 +58,7 @@ Permutations.prototype.add = function () {
   for (let i = 0; i < this.n; i++) {
     arr[i] = i;
   }
+
   //form result array without repetition
   for (let j = 0; j < this.k; j++) {
     this.r[j] = arr[this.i[j]];
@@ -82,14 +83,11 @@ Permutations.prototype.next = function () {
 };
 
 Permutations.prototype.process = function () {
-  const placementArray = [];
+  let placementArray = [];
 
   do {
-    let resultPlacement = this.r;
-    placementArray.push(resultPlacement);
+    placementArray.push([].concat(this.r)); //cause of reference array types
   } while (this.next());
 
   return placementArray;
 };
-
-

@@ -26,7 +26,7 @@ import {connect} from 'react-redux';
 
 import _ from 'lodash';
 import {vkEmitter, VK_EVENTS} from '../../api/vkApi';
-import {deleteVkCredentials, AUTHORIZATION_DENIED} from '../../redux/actions/vkActions';
+import {deleteVkCredentials} from '../../redux/actions/vkActions';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -107,7 +107,6 @@ class CollageScene extends Component {
   }
 
   nextImages() {
-
     //animate collage
     this.refs.animatedView.tada(800);
 
@@ -127,10 +126,10 @@ class CollageScene extends Component {
 
   getImagesUrls() {
     var items = [];
-    var currentOrder = this.state.imgOrdersArr[this.state.curImgOrder];
+    var curOrder = this.state.imgOrdersArr[this.state.curImgOrder];
 
-    for (var i = 0; i < currentOrder.length; i++) {
-      items.push(this.props.selectedMediaItems[currentOrder[i]]);
+    for (var i = 0; i < curOrder.length; i++) {
+      items.push(this.props.selectedMediaItems[curOrder[i]]);
     }
 
     return items.map((item) => {

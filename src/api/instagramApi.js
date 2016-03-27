@@ -1,5 +1,4 @@
 'use strict';
-
 const ACCESS_TOKEN = '192980099.467ede5.18e86b46b5c6475aab96be299f59b337';
 
 export const USERNAME_MAX_LENGTH = 30;
@@ -13,9 +12,9 @@ export const ENDPOINTS = {
   }
 };
 
-export const ERRORS = {  
-  userNotExist: {type: 'userNotExist', message: 'пользователя не существует'},
+export const ERRORS = {
+  userNotExist: {type: 'userNotExist', message: 'пользователь не существует'},
   userSelectError: {type: 'userFindError', message: 'не удалось найти пользователя'},
   userDataNowAllowed: {type: 'userDataNowAllowed', message: 'фотографии недоступны'},
-  userNotHaveMediaData: {type: 'userNotHaveMediaData' , message: 'у пользователя нет фотографий'}
+  userNotHaveMediaData: {type: 'userNotHaveMediaData', message: 'у пользователя нет фотографий'}
 };

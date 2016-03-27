@@ -11,10 +11,9 @@ import React, {
   InteractionManager
 } from 'react-native';
 
-import {ERRORS as INST_ERROR} from '../api/instagramApi';
+import {ERRORS as INST_ERRORS} from '../api/instagramApi';
 
 import MediaItemThumbnail from './MediaItemThumbnail/MediaItemThumbnail';
-import BackButton from './common/BackButton/BackButton';
 import FooterButton from './common/FooterButton';
 import LoadingIndicator from './common/LoadingIndicator';
 
@@ -40,11 +39,11 @@ class MediaListScene extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.fetchData();
-
     });
   }
 
   componentWillReceiveProps(nextProps) {
+    //update navBar title on new thumbnail selected
     if (this.props.selectedMediaItemsCount !== nextProps.selectedMediaItemsCount) {
       Actions.refresh({title: `${nextProps.selectedMediaItemsCount} фото`})
     }
@@ -63,19 +62,19 @@ class MediaListScene extends Component {
         });
       })
       .catch((error) => {
-        switch (error.type) {         
-          case INST_ERROR.userNotHaveMediaData.type:
+        switch (error.type) {
+          case INST_ERRORS.userNotHaveMediaData.type:
           {
             this.setState({
-              errorMessage: INST_ERROR.userNotHaveMediaData.message,
+              errorMessage: INST_ERRORS.userNotHaveMediaData.message,
               showError: true,
             });
             break;
           }
-          case INST_ERROR.userDataNowAllowed.type:
+          case INST_ERRORS.userDataNowAllowed.type:
           {
             this.setState({
-              errorMessage: INST_ERROR.userDataNowAllowed.message,
+              errorMessage: INST_ERRORS.userDataNowAllowed.message,
               showError: true,
             });
             break;

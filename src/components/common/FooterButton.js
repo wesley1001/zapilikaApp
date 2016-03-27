@@ -10,6 +10,7 @@ import React, {
 } from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
+const TOUCH_DELAY = 400;
 
 export default class FooterButton extends Component {
   constructor(props) {
@@ -24,10 +25,8 @@ export default class FooterButton extends Component {
     if (this.state.isTouched) return;
 
     this.setState({isTouched: true});
-    const TOUCH_DELAY = 400;
     this.props.onPress();
     setTimeout(() => this.setState({isTouched: false}), TOUCH_DELAY);
-
   }
 
   render() {

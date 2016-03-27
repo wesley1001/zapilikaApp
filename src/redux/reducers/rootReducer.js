@@ -1,6 +1,4 @@
 'use strict';
-
-'use strict';
 import { combineReducers } from 'redux';
 
 import instagramReducer from './instagramReducer';

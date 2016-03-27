@@ -1,7 +1,8 @@
 'use strict';
-export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 const CLIENT_ID = '5343670';
 const ROOT_API_URL = 'https://api.vk.com/method/';
+
+export const AUTHORIZATION_PROCESSED_URL = 'https://oauth.vk.com/blank.html#';
 
 export const ERRORS = {
   authDenied: {type: 'authDenied', message: 'авторизация отменена'},
@@ -57,15 +58,13 @@ export const ENDPOINTS = {
   }
 };
 
-
-
 const getUploadServer = (access_token, user_id) => {
   return fetch(ENDPOINTS.getUploadServer(access_token, user_id))
     .then((response) => response.json())
     .then((res) => {
       if (res.error) {
         return Promise.reject(ERRORS.authError);
-      } else {      
+      } else {
         return Promise.resolve(res.response.upload_url);
       }
     })
@@ -134,7 +133,7 @@ export function sharePhoto(photoUri, credentials) {
 
 export function parseTokenUrl(url) {
   //get data from vk.com redirect uri response and parse it to credentials object
-  const credMassive = url.match(/(\w+=[^\&]+)/g);
+  const credMassive = url.match(/(\w+=[^&]+)/g);
   let credentials = {};
 
   for (let i = 0; i < credMassive.length; i++) {

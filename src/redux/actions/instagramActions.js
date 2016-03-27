@@ -1,5 +1,4 @@
 'use strict';
-import {NetInfo} from 'react-native';
 import {ENDPOINTS, ERRORS} from '../../api/instagramApi';
 
 export const ACTION_TYPES = {
@@ -90,6 +89,6 @@ export const deselectMediaItem = (mediaItem) => {
 export const eraseSelectedMediaItems = () => {
   return {
     type: ACTION_TYPES.ERASE_SELECTED_MEDIA_ITEMS,
-    payload: []
+    selectedMediaItems: []
   }
 };

@@ -13,8 +13,8 @@ export default class VkPostScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      renderLoadingIndicatorOnly: true, //this for better nav transitions
-      isContentLoading: true //this for better user experience
+      renderLoadingIndicatorOnly: true, //for better nav transitions
+      isContentLoading: true //for better user experience
     }
   }
 

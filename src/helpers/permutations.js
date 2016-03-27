@@ -53,13 +53,13 @@ Permutations.prototype.add = function () {
     this.i[j] = 0
   }
 
-  //form prim array [0,1..n-1];
+  //init prim array [0,1..n-1];
   let arr = [];
   for (let i = 0; i < this.n; i++) {
     arr[i] = i;
   }
 
-  //form result array without repetition
+  //set result array without repetition
   for (let j = 0; j < this.k; j++) {
     this.r[j] = arr[this.i[j]];
     arr.splice(this.i[j], 1);
@@ -83,6 +83,7 @@ Permutations.prototype.next = function () {
 };
 
 Permutations.prototype.process = function () {
+  //return orders array
   let placementArray = [];
 
   do {

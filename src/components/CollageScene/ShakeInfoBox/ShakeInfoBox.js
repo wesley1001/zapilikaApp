@@ -8,10 +8,10 @@ import React, {
 
 const ShakeInfoBox = ({showImage}) => {
   return (
-    <View style={styles.shakeInfoBox}>
-      <Text style={styles.shakeInfoText}>потряси чтобы сменить</Text>
+    <View style={styles.box}>
+      <Text style={styles.text}>потряси чтобы сменить</Text>
       {showImage ? <Image source={require('./img/shake.png')}
-             style={styles.shakeInfoImage}/> : null}
+             style={styles.image}/> : null}
     </View>
   )
 };
@@ -21,30 +21,27 @@ ShakeInfoBox.PropTypes = {
 };
 
 ShakeInfoBox.defaultProps = {
-  showImage: true
+  showImage: false
 };
 
 
-
-
 const styles = StyleSheet.create({
-  shakeInfoBox: {
+  box: {
     paddingHorizontal: 50,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  shakeInfoText: {
+  text: {
     fontSize: 16,
     opacity: 0.5,
     textAlign: 'center'
   },
-  shakeInfoImage: {
+  image: {
     width: 100,
     height: 100,
     opacity: 0.2
   }
 });
-
 
 export default ShakeInfoBox;

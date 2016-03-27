@@ -22,7 +22,6 @@ LoadingIndicator.PropTypes = {
   animating: React.PropTypes.bool
 };
 
-
 const styles = StyleSheet.create({
   indicatorBox: {
     flex: 1,
@@ -32,7 +31,6 @@ const styles = StyleSheet.create({
   indicator: {
     height: 80
   }
-
 });
 
 export default LoadingIndicator;

@@ -29,11 +29,9 @@ export const initVkCredentialsLocal = () => {
 };
 
 export const fetchVkCredentialsOnline = (url) => {
-  //online authorization
   return (dispatch) => {
     var credentials = parseTokenUrl(url);
 
-    //error handling
     if (!credentials.access_token || !credentials.user_id) {
       if (credentials.error && credentials.error === 'access_denied') {
         return Promise.reject(ERRORS.authDenied);
@@ -45,7 +43,7 @@ export const fetchVkCredentialsOnline = (url) => {
     //add credentials to local phone store
     DB.vk.findById(1).then((vkData) => {
       if (!vkData) {
-        //handle first time adding data;
+        //handle the first time addition;
         DB.vk.add(credentials)
       }
       else {

@@ -32,11 +32,12 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 const deviceAspectRatio = deviceHeight / deviceWidth;
 const SMALL_DEVICES_ASPECT_RATIO = 1.5;
+const PHOTOS_IN_COLLAGE_COUNT = 4;
 
 class CollageScene extends Component {
   constructor(props) {
     super(props);
-    var imgOrdersArr = new Permutations(this.props.selectedMediaItems.length, 4).process();
+    var imgOrdersArr = new Permutations(this.props.selectedMediaItems.length, PHOTOS_IN_COLLAGE_COUNT).process();
     imgOrdersArr = _.shuffle(imgOrdersArr);
 
     this.state = {
@@ -49,7 +50,7 @@ class CollageScene extends Component {
 
   componentDidMount() {
     RNShakeEventIOS.addEventListener('shake', () => {
-      this.nextImages();
+      this.getNextImagesOrder();
     });
 
     vkEmitter.on(VK_EVENTS.AUTHORIZATION_SUCCESS, () => {
@@ -62,6 +63,7 @@ class CollageScene extends Component {
 
   componentWillUnmount() {
     RNShakeEventIOS.removeEventListener('shake');
+
     vkEmitter.removeAllEventListeners(VK_EVENTS.AUTHORIZATION_SUCCESS);
     vkEmitter.removeAllEventListeners(VK_EVENTS.AUTHORIZATION_DENIED);
   }
@@ -88,15 +90,15 @@ class CollageScene extends Component {
       });
   }
 
-  makeSnapShot() {
+  makeCollageSnapshot() {
     return UIManager
       .takeSnapshot(this.refs.collage, {format: 'png'})
-      .then((snapShotUri) => this.setState({snapShotUri: snapShotUri}))
+      .then((snapShotUri) => this.setState({snapShotUri}))
       .catch((err) => alert(err));
   }
 
   onShareButtonPress() {
-    this.makeSnapShot()
+    this.makeCollageSnapshot()
       .then(() => {
         if (this.props.vk.authorized) {
           this.share();
@@ -106,7 +108,7 @@ class CollageScene extends Component {
       });
   }
 
-  nextImages() {
+  getNextImagesOrder() {
     //animate collage
     this.refs.animatedView.tada(800);
 
@@ -141,14 +143,14 @@ class CollageScene extends Component {
     var imagesUrls = this.getImagesUrls();
     return (
       <View style={[this.props.layoutStyle, styles.container]}>
-        <View style={styles.collageBox}>
+        <View style={[styles.centered,styles.collageBox]}>
           <Animatable.View
             ref="animatedView"
-            style={styles.animatedView}>
+            style={styles.centered}>
             <Collage ref="collage" images={imagesUrls}/>
           </Animatable.View>
         </View>
-        <View style={styles.shakeInfoBox}>
+        <View style={styles.centered}>
           <ShakeInfoBox showImage={deviceAspectRatio > SMALL_DEVICES_ASPECT_RATIO}/>
         </View>
         <FooterButton
@@ -163,7 +165,7 @@ class CollageScene extends Component {
   renderSharingIndicator() {
     if (this.state.isSharing) {
       return (
-        <View style={styles.sharingIndicator}>
+        <View style={styles.sharingIndicatorBox}>
           <LoadingIndicator />
         </View>
       )
@@ -176,20 +178,14 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start',
   },
+  centered: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   collageBox: {
     paddingVertical: PixelRatio.getPixelSizeForLayoutSize(10),
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  animatedView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  shakeInfoBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sharingIndicator: {
+  sharingIndicatorBox: {
     position: 'absolute',
     left: 0,
     right: 0,

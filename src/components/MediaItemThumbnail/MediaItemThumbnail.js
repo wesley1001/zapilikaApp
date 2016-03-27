@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    //paddingTop: PixelRatio.getPixelSizeForLayoutSize(2),
     fontFamily: 'HelveticaNeue-Light',
     fontWeight: '300',
     fontSize: 20,

@@ -22,7 +22,7 @@ export default (state = {
     }
     case ACTION_TYPES.ERASE_SELECTED_MEDIA_ITEMS:
     {
-      return {...state, selectedMediaItems: action.payload}
+      return {...state, selectedMediaItems: action.selectedMediaItems}
     }
   }
 

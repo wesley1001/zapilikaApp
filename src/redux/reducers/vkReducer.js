@@ -8,11 +8,8 @@ export default (state = {
   switch (action.type) {
     case ACTION_TYPES.FETCH_VK_CREDENTIALS_ONLINE:
     case ACTION_TYPES.INIT_VK_CREDENTIALS_LOCAL:
-      return {...state, credentials: action.credentials, authorized: action.authorized};
     case ACTION_TYPES.DELETE_VK_CREDENTIALS:
-    {
-      return {...state, credentials: action.credentials, authorized: action.authorized}
-    }
+      return {...state, credentials: action.credentials, authorized: action.authorized};  
   }
   return state;
 };

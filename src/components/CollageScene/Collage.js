@@ -4,7 +4,6 @@ import React, {
   View,
   StyleSheet,
   Image,
-  Text,
   Dimensions,
   PixelRatio,
   ActivityIndicatorIOS
@@ -40,7 +39,7 @@ export default class Collage extends Component {
             </Image>
             <Image
               source={{uri: this.props.images[1]}}
-              style={[styles.img,styles.leftBotImg]}
+              style={[styles.img, styles.leftBotImg]}
               onLoadStart={() => {this.setState({isLeftBotImgLoading: true})}}
               onLoad={() => {this.setState({isLeftBotImgLoading: false})}}
             >
@@ -50,7 +49,7 @@ export default class Collage extends Component {
           <View style={styles.rightCol}>
             <Image
               source={{uri: this.props.images[2]}}
-              style={[styles.img,styles.rightTopImg]}
+              style={[styles.img, styles.rightTopImg]}
               onLoadStart={() => {this.setState({isRightTopImgLoading: true})}}
               onLoad={() => {this.setState({isRightTopImgLoading: false})}}
             >
@@ -58,7 +57,7 @@ export default class Collage extends Component {
             </Image>
             <Image
               source={{uri: this.props.images[3]}}
-              style={[styles.img,styles.rightBotImg]}
+              style={[styles.img, styles.rightBotImg]}
               onLoadStart={() => {this.setState({isRightBotImgLoading: true})}}
               onLoad={() => {this.setState({isRightBotImgLoading: false})}}
             >
@@ -69,6 +68,7 @@ export default class Collage extends Component {
       </View>
     )
   }
+
   renderLoadingIndicator(isLoading) {
     return isLoading ? <ActivityIndicatorIOS
       color="#4caf50"
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   imagesBox: {
     flex: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   captionBox: {
     flex: 1,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   captionText: {
     color: '#fff',
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   leftCol: {
     flex: 1.5,
@@ -114,37 +114,23 @@ const styles = StyleSheet.create({
   },
   img: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'gray',
+    margin: 1,
+    borderRadius: 5,
+    resizeMode: 'cover',
   },
   leftTopImg: {
-    backgroundColor: 'gray',
     flex: 2,
-    margin: 1,
-    borderRadius: 5,
-    resizeMode: 'cover'
   },
   leftBotImg: {
-    backgroundColor: 'gray',
     flex: 1.1,
-    margin: 1,
-    borderRadius: 5,
-    resizeMode: 'cover'
-
   },
   rightTopImg: {
-    backgroundColor: 'gray',
     flex: 0.7,
-    margin: 1,
-    borderRadius: 5,
-    resizeMode: 'cover'
-
   },
   rightBotImg: {
-    backgroundColor: 'gray',
     flex: 1,
-    margin: 1,
-    borderRadius: 5,
-    resizeMode: 'cover'
   }
 });
 

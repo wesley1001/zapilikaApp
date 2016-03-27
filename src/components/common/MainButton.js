@@ -6,6 +6,8 @@ import React, {
   Text
 } from 'react-native';
 
+const TOUCH_DELAY = 400;
+
 export default class MainButton extends Component {
   constructor(props) {
     super(props);
@@ -16,15 +18,12 @@ export default class MainButton extends Component {
 
   onPress() {
     //prevent multiple touches on navigation transitions
-    if(this.state.isTouched) return;
+    if (this.state.isTouched) return;
 
     this.setState({isTouched: true});
-    const TOUCH_DELAY = 400;
     this.props.onPress();
     setTimeout(() => this.setState({isTouched: false}), TOUCH_DELAY);
   }
-
-
 
   render() {
     return (

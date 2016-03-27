@@ -25,8 +25,8 @@ class VkAuthScene extends Component {
     this.state = {
       currentUrl: null,
       authorizedSuccess: false,
-      renderLoadingIndicatorOnly: true, //this for better nav transitions
-      isContentLoading: true, //this for better user experience
+      renderLoadingIndicatorOnly: true, //for better nav transitions
+      isContentLoading: true, //for better user experience
     }
   }
 
